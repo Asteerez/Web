@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asteerez | Game Servers & Creative Stuff</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'sans': ['Inter', 'sans-serif'],
+              'mono': ['JetBrains Mono', 'monospace'],
+            },
+            animation: {
+              'gradient': 'gradient 8s ease infinite',
+              'float': 'float 6s ease-in-out infinite',
+              'glow': 'glow 2s ease-in-out infinite alternate',
+            },
+            keyframes: {
+              gradient: {
+                '0%, 100%': { 'background-position': '0% 50%' },
+                '50%': { 'background-position': '100% 50%' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              glow: {
+                '0%': { 'box-shadow': '0 0 20px rgba(168, 85, 247, 0.4)' },
+                '100%': { 'box-shadow': '0 0 40px rgba(168, 85, 247, 0.8)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-blue-900/20 animate-gradient bg-400% opacity-50"></div>
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-slate-900/80 backdrop-blur-xl border-b border-purple-500/20" x-data="{ mobileOpen: false }">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center font-bold text-sm">A</div>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Asteerez</h1>
+          </div>
+          
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#home" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">Home</a>
+            <a href="#servers" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">Game Servers</a>
+            <a href="#portfolio" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">My Stuff</a>
+            <a href="#about" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">About Me</a>
+            <a href="#contact" class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-2 rounded-full font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105">Hit Me Up</a>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button @click="mobileOpen = !mobileOpen" class="md:hidden p-2">
+            <div class="w-6 h-6 flex flex-col justify-center items-center">
+              <span class="w-full h-0.5 bg-white transition-all" :class="mobileOpen ? 'rotate-45 translate-y-1' : ''"></span>
+              <span class="w-full h-0.5 bg-white mt-1 transition-all" :class="mobileOpen ? 'opacity-0' : ''"></span>
+              <span class="w-full h-0.5 bg-white mt-1 transition-all" :class="mobileOpen ? '-rotate-45 -translate-y-1' : ''"></span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileOpen" x-transition class="md:hidden mt-4 pb-4 border-t border-purple-500/20 pt-4">
+          <div class="flex flex-col space-y-3">
+            <a href="#home" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">Home</a>
+            <a href="#servers" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">Game Servers</a>
+            <a href="#portfolio" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">My Stuff</a>
+            <a href="#about" class="text-gray-300 hover:text-purple-400 transition-colors font-medium">About Me</a>
+            <a href="#contact" class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-2 rounded-full font-medium text-center">Hit Me Up</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="relative z-10">
+      <!-- Hero Section -->
+      <section id="home" class="min-h-screen flex items-center justify-center px-6 pt-20">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="mb-8">
+            <h1 class="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-gradient bg-400%">
+              Asteerez
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 font-light">
+              Utilitarian • Philosophical • Internet Dweller
+            </p>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+              Heya! Welcome to my home page, think of this like a carrd.co except I paid money to host this garbage AI designed mumbo jumbo.
+            </p>
+          </div>
+          
+          <div class="flex flex-wrap justify-center gap-4 mb-16">
+            <a href="#servers" class="bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-3 rounded-full font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105 animate-glow">
+              Hosted Servers
+            </a>
+            <a href="#portfolio" class="border border-purple-500/50 px-8 py-3 rounded-full font-medium hover:bg-purple-500/10 transition-all duration-300 hover:border-purple-400">
+              Portfolio
+            </a>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300">
+              <div class="text-3xl font-bold text-purple-400 mb-2">3</div>
+              <div class="text-gray-300">Game Servers Running</div>
+            </div>
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300">
+              <div class="text-3xl font-bold text-pink-400 mb-2">24/7</div>
+              <div class="text-gray-300">Always Online</div>
+            </div>
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300">
+              <div class="text-3xl font-bold text-blue-400 mb-2">Multi</div>
+              <div class="text-gray-300">Platform Support</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Game Servers Section -->
+      <section id="servers" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Servers
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+              Used to allow my friendgroup to stay interconnected, join if you please!
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Minecraft Servers -->
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                <span class="text-2xl font-bold">⛏️</span>
+              </div>
+              <h3 class="text-2xl font-bold mb-4 text-green-400">Minecraft Servers</h3>
+              <div class="space-y-3 text-gray-300">
+                <div class="flex justify-between">
+                  <span>Join at:</span>
+                  <code class="bg-slate-700 px-2 py-1 rounded text-sm font-mono">asteerez.ddns.net</code>
+                </div>
+                <div class="border-t border-gray-600 pt-3">
+                  <p class="font-semibold text-white mb-2">What's Available:</p>
+                  <ul class="space-y-1 text-sm">
+                    <li>• <strong>Modded:</strong> All the Mods 10</li>
+                    <li>• <strong>Vanilla:</strong> Latest</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Terraria Server -->
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6">
+                <span class="text-2xl font-bold">⚔️</span>
+              </div>
+              <h3 class="text-2xl font-bold mb-4 text-blue-400">Terraria Server</h3>
+              <div class="space-y-3 text-gray-300">
+                <div class="flex justify-between">
+                  <span>Port:</span>
+                  <code class="bg-slate-700 px-2 py-1 rounded text-sm font-mono">7777</code>
+                </div>
+                <div class="border-t border-gray-600 pt-3">
+                  <p class="font-semibold text-white mb-2">Modded & Ready:</p>
+                  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3371486646" target="_blank" class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors text-sm">
+                    <span>Check Out The Mods</span>
+                    <span class="ml-1">↗</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unturned Server -->
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-6">
+                <span class="text-2xl font-bold">🧟</span>
+              </div>
+              <h3 class="text-2xl font-bold mb-4 text-orange-400">Unturned Server</h3>
+              <div class="space-y-3 text-gray-300">
+                <div class="flex justify-between">
+                  <span>Port:</span>
+                  <code class="bg-slate-700 px-2 py-1 rounded text-sm font-mono">27015</code>
+                </div>
+                <div class="border-t border-gray-600 pt-3">
+                  <p class="text-sm">Extremely Unused, hosted for the hell of it.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Portfolio Section -->
+      <section id="portfolio" class="py-20 px-6 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Personal endeavors
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+              Collection of things that I do, bound to expand. Nothing yet though, not proud of any of my work currently.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ activeModal: null }">
+            <!-- Music Portfolio -->
+            <div @click="activeModal = 'music'" class="cursor-pointer group">
+              <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                  <span class="text-2xl">🎵</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-purple-400">My Music</h3>
+                <p class="text-gray-300 mb-4">Music Emporium straight from the web</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-400">Click to View</span>
+                  <span class="text-purple-400 group-hover:translate-x-2 transition-transform">→</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Art Portfolio -->
+            <div @click="activeModal = 'art'" class="cursor-pointer group">
+              <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+                <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                  <span class="text-2xl">🎨</span>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-pink-400">Digital Art</h3>
+                <p class="text-gray-300 mb-4">Art, Sketch, Concept nonesense at your convenience.</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-400">Click to View</span>
+                  <span class="text-pink-400 group-hover:translate-x-2 transition-transform">→</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modals -->
+            <div x-show="activeModal" x-transition.opacity class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+              <div class="bg-slate-800 rounded-2xl p-8 w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto border border-purple-500/20" @click.outside="activeModal = null">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-3xl font-bold text-white" x-text="activeModal === 'music' ? 'My Music Collection' : 'My Art Gallery'"></h3>
+                  <button @click="activeModal = null" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <template x-if="activeModal === 'music'">
+                  <div class="space-y-6">
+                    <p class="text-gray-300">collection of Noise, made with caffeine.</p>
+                    <div class="grid gap-4">
+                      <div class="bg-slate-700/50 rounded-xl p-6 border border-purple-500/20">
+                        <h4 class="font-semibold text-white mb-2">Original</h4>
+                        <div class="bg-slate-600/50 h-24 rounded-lg flex items-center justify-center text-gray-400 mb-3">
+                          [Music Player Coming Soon!]
+                        </div>
+                        <p class="text-sm text-gray-400">Working on getting SoundCloud embeds set up here</p>
+                      </div>
+                      <div class="bg-slate-700/50 rounded-xl p-6 border border-purple-500/20">
+                        <h4 class="font-semibold text-white mb-2">Remixes & Fun Stuff</h4>
+                        <div class="bg-slate-600/50 h-24 rounded-lg flex items-center justify-center text-gray-400 mb-3">
+                          [More Music Coming Soon!]
+                        </div>
+                        <p class="text-sm text-gray-400">Piano Sandbox</p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <template x-if="activeModal === 'art'">
+                  <div class="space-y-6">
+                    <p class="text-gray-300">Crisp Pixels from me to you, Asteerez style.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div class="bg-slate-700/50 rounded-xl aspect-square flex items-center justify-center text-gray-400 border border-purple-500/20">
+                        [Artwork Coming Soon!]
+                      </div>
+                      <div class="bg-slate-700/50 rounded-xl aspect-square flex items-center justify-center text-gray-400 border border-purple-500/20">
+                        [More Art Soon!]
+                      </div>
+                      <div class="bg-slate-700/50 rounded-xl aspect-square flex items-center justify-center text-gray-400 border border-purple-500/20">
+                        [Still Working On It!]
+                      </div>
+                      <div class="bg-slate-700/50 rounded-xl aspect-square flex items-center justify-center text-gray-400 border border-purple-500/20">
+                        [Coming Soon!]
+                      </div>
+                      <div class="bg-slate-700/50 rounded-xl aspect-square flex items-center justify-center text-gray-400 border border-purple-500/20">
+                        [More Soon!]
+                      </div>
+                      <div class="bg-slate-700/50 rounded-xl aspect-square flex items-center justify-center text-gray-400 border border-purple-500/20">
+                        [Stay Tuned!]
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              About Me
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+              I'm something alright.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+              <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+                <h3 class="text-2xl font-bold mb-4 text-purple-400">My Goals</h3>
+                <p class="text-gray-300 leading-relaxed">
+                  I seek to change the world, still waiting on that though.
+                </p>
+              </div>
+              
+              <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+                <h3 class="text-2xl font-bold mb-4 text-pink-400">Proficiencies</h3>
+                <p class="text-gray-300 leading-relaxed">
+                  Debates, Systems Management, Concept Generation, Finding easy ways around Difficult Tasks. Gaslight, Gatekeep, Girlboss.
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+                <h3 class="text-2xl font-bold mb-4 text-blue-400">Creativity</h3>
+                <p class="text-gray-300 leading-relaxed">
+                  I do dabble here and there with creative things, I just never get to publishing them.
+                </p>
+              </div>
+              
+              <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+                <h3 class="text-2xl font-bold mb-4 text-green-400">Community</h3>
+                <p class="text-gray-300 leading-relaxed">
+                  I've a growing friendgroup that I hope to organize into a team of folks one day. There's an aspect of teambuilding I haven't reached in quite a while.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="py-20 px-6 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Socials
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+              Links to my socials, at your convenience
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="https://discordapp.com/users/896817129964335114" target="_blank" class="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                  <span class="text-xl">💬</span>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-white">Discord</h3>
+                  <p class="text-gray-400 text-sm">Asteerez</p>
+                </div>
+              </div>
+            </a>
+
+            <a href="https://github.com/Asteerez" target="_blank" class="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl flex items-center justify-center">
+                  <span class="text-xl">⚡</span>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-white">GitHub</h3>
+                  <p class="text-gray-400 text-sm">Code Tomfoolery</p>
+                </div>
+              </div>
+            </a>
+
+            <a href="https://x.com/Asteerez" target="_blank" class="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                  <span class="text-xl">🐦</span>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-white">Twitter/X</h3>
+                  <p class="text-gray-400 text-sm">@Asteerez</p>
+                </div>
+              </div>
+            </a>
+
+            <a href="https://www.youtube.com/@Asteerez" target="_blank" class="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                  <span class="text-xl">📹</span>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-white">YouTube</h3>
+                  <p class="text-gray-400 text-sm">Content Creation, slow but steady.</p>
+                </div>
+              </div>
+            </a>
+
+            <a href="https://steamcommunity.com/id/Asteerez" target="_blank" class="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center">
+                  <span class="text-xl">🎮</span>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-white">Steam</h3>
+                  <p class="text-gray-400 text-sm">Gaming Hub</p>
+                </div>
+              </div>
+            </a>
+
+            <a href="https://open.spotify.com/user/xcdb4t9dqj7pf0hb0ootgk4uv" target="_blank" class="group bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                  <span class="text-xl">🎧</span>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-white">Spotify</h3>
+                <p class="text-gray-400 text-sm">Astrophe</p>
+                </div>
+              </div>
+            </a>
+            <!-- Footer -->
+          <footer class="bg-slate-900/80 border-t border-purple-500/20 py-6 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Asteerez. Crafted with caffeine and chaos.</p>
+          </footer>
+
+
+
+
+           
