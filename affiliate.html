@@ -1,104 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <!-- Discord Embed Meta Tags -->
-    <meta property="og:title" content="Asteerez | Affiliate Servers">
-    <meta property="og:description" content="Discord servers managed or co‑owned by Asteerez">
-    <meta property="og:url" content="https://web.asteerez.xyz/affiliate">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Asteerez">
-
-    <!-- Twitter Card Meta Tags (also used by Discord) -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Asteerez | Affiliate Servers">
-    <meta name="twitter:description" content="Explore Discord communities run by Asteerez">
-
-    <!-- Theme Color for Discord -->
-    <meta name="theme-color" content="#ec4899">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Asteerez | Affiliate</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: 'Kanit', sans-serif;
-      }
-    </style>
-  </head>
-  <body class="bg-gradient-to-br from-gray-900 via-purple-800 to-pink-700 text-white scroll-smooth">
-    <!-- Nav -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/90 backdrop-blur-md shadow-md border-b border-pink-400">
-      <nav class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-pink-400">Asteerez</h1>
-        <ul class="flex space-x-6 font-medium">
-          <li><a href="index.html" class="hover:text-pink-300">Home</a></li>
-          <li><a href="affiliate.html" class="text-pink-300 underline underline-offset-4 decoration-pink-400">Affiliate</a></li>
-        </ul>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asteerez | Affiliate</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <style>
+    :root{
+      --bg:#0b0c10; --surface:#11131a; --card:#161922; --ink:#e7e7ee; --muted:#a0a3ad; --accent:#ff2ea6; --accent-2:#b347ff;
+      --ring: rgba(255,46,166,.4);
+    }
+    html,body{background:var(--bg);color:var(--ink);margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px}
+    /* Header */
+    .topbar{position:sticky;top:0;z-index:40;background:rgba(10,10,14,.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--ring)}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo-dot{color:var(--accent)}
+    .nav{display:flex;gap:18px;align-items:center}
+    .nav a{opacity:.9}
+    .nav a[aria-current="page"]{color:var(--accent);text-decoration:underline;text-underline-offset:6px}
+    .bar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px}
+    /* Hero */
+    .hero{padding:48px 0 18px}
+    .hero h1{font-size:clamp(28px,4vw,44px);margin:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{margin:8px 0 0;color:var(--muted)}
+    /* Grid */
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .card{background:var(--card);border:1px solid rgba(255,46,166,.2);border-radius:16px;padding:18px;display:flex;flex-direction:column;align-items:center;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+    .card:hover{box-shadow:0 8px 22px rgba(255,46,166,.22)}
+    .card img{width:84px;height:84px;border-radius:999px;object-fit:cover;border:2px solid var(--accent);margin:4px 0 12px}
+    .card h3{margin:4px 0 6px;font-size:20px}
+    .card p{margin:0 0 14px;color:var(--muted);text-align:center}
+    .btn{margin-top:auto;display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:white;font-weight:600}
+    .btn:hover{filter:brightness(.95)}
+    .callout{margin:28px auto 0;max-width:720px;background:rgba(22,25,34,.8);border-left:4px solid var(--accent);padding:18px;border-radius:12px}
+    footer{margin:36px 0 0;padding:18px 0;color:#cfcfe4;border-top:1px solid rgba(255,46,166,.2);text-align:center}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="bar">
+      <div class="brand"><span class="logo-dot">●</span><strong>Asteerez</strong></div>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="affiliate.html" aria-current="page">Affiliate</a>
+        <a href="shop.html">Shop</a>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <main class="pt-28 pb-16 px-6">
-      <section id="affiliate" class="max-w-7xl mx-auto text-center">
-        <h2 class="text-4xl font-bold mb-4 text-pink-300">🤝 Affiliate Discord Servers</h2>
-        <p class="max-w-3xl mx-auto mb-10 text-lg">Below are the Discord communities that I manage or co‑own. Feel free to join and say hi!</p>
+  <main class="wrap">
+    <section class="hero">
+      <h1>🤝 Affiliate Discord Servers</h1>
+      <p>Below are the Discord communities that I manage or co‑own. Feel free to join and say hi!</p>
+    </section>
 
-        <!--
-          📌 Add or remove <article> blocks inside this grid –
-          it will automatically re‑flow and expand to fit as many as you include.
-        -->
-        <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr">
-          <!-- Card 1 -->
-          <article class="bg-gray-800 rounded-xl shadow-lg hover:shadow-pink-400 transition-shadow p-6 flex flex-col items-center">
-            <img src="https://cdn.discordapp.com/icons/1227230825943400468/54b733f0a78375feda9887c30375acd9.png?size=256" alt="Starz Icon" class="w-24 h-24 rounded-full mb-4 border-2 border-pink-400 object-cover" />
-            <h3 class="text-2xl font-semibold mb-2">Starz</h3>
-            <p class="text-sm mb-4 text-center">Furry community breeding grounds – join at your own discretion.</p>
-            <a href="https://discord.gg/kJXXS47h6d" target="_blank" class="mt-auto px-4 py-2 bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">Join Server</a>
-          </article>
+    <!-- Responsive column/row grid of servers -->
+    <section class="grid" aria-label="Affiliate Servers">
+      <!-- Starz -->
+      <article class="card">
+        <img src="https://cdn.discordapp.com/icons/1227230825943400468/54b733f0a78375feda9887c30375acd9.png?size=256" alt="Starz Icon" />
+        <h3>Starz</h3>
+        <p>Furry community breeding grounds – join at your own discretion.</p>
+        <a class="btn" href="https://discord.gg/kJXXS47h6d" target="_blank" rel="noopener">Join Server</a>
+      </article>
+      <!-- Fuzz -->
+      <article class="card">
+        <img src="https://cdn.discordapp.com/attachments/1295593597235892326/1390769748765184081/pop_drcat.gif" alt="Fuzz Icon" />
+        <h3>Fuzz</h3>
+        <p>A radical space for diverse viewpoints – come help mix things up!</p>
+        <a class="btn" href="https://discord.gg/kM3jrYTzv4" target="_blank" rel="noopener">Join Server</a>
+      </article>
+      <!-- Astocracy -->
+      <article class="card">
+        <img src="https://cdn.discordapp.com/icons/1229527446110601308/aab79d0fa4dd9e068dd3b5ae9c74ac5b.png?size=256" alt="Astocracy Icon" />
+        <h3>Astocracy</h3>
+        <p>My quiet personal abode – pop in and liven the place up!</p>
+        <a class="btn" href="https://discord.gg/jKWhj9cc" target="_blank" rel="noopener">Join Server</a>
+      </article>
+      <!-- The Place -->
+      <article class="card">
+        <img src="https://cdn.discordapp.com/icons/1221940329847197726/a7c13c07c0d3f6d9a87407f0d25c19e6.png?size=600" alt="The Place Icon" />
+        <h3>The Place</h3>
+        <p>Inactive and chill furry server with an attached minecraft server for application</p>
+        <a class="btn" href="https://discord.com/invite/WCpcPeDg2d" target="_blank" rel="noopener">Join Server</a>
+      </article>
+      <!-- The Dartboard -->
+      <article class="card">
+        <img src="https://cdn.discordapp.com/icons/1303478588527345714/024e9e2b8fd64643c7c57c87e97e001d.png?size=600" alt="The Dartboard Icon" />
+        <h3>The Dartboard</h3>
+        <p>Friend server with a dying VC community</p>
+        <a class="btn" href="https://discord.gg/WA87u9CMYp" target="_blank" rel="noopener">Join Server</a>
+      </article>
+    </section>
 
-          <!-- Card 2 -->
-          <article class="bg-gray-800 rounded-xl shadow-lg hover:shadow-pink-400 transition-shadow p-6 flex flex-col items-center">
-            <img src="https://cdn.discordapp.com/attachments/1295593597235892326/1390769748765184081/pop_drcat.gif?ex=686976c3&is=68682543&hm=8fae0259e3194abc52147cd851a9831a892701f729ff7a9ada7e42ecd05df324&" alt="Fuzz Icon" class="w-24 h-24 rounded-full mb-4 border-2 border-pink-400 object-cover" />
-            <h3 class="text-2xl font-semibold mb-2">Fuzz</h3>
-            <p class="text-sm mb-4 text-center">A radical space for diverse viewpoints – come help mix things up!</p>
-            <a href="https://discord.gg/kM3jrYTzv4" target="_blank" class="mt-auto px-4 py-2 bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">Join Server</a>
-          </article>
+    <aside class="callout" role="note">
+      <h3 style="margin:0 0 6px">Want to partner up?</h3>
+      <p style="margin:0">If you're interested in collaborating, invite me to your server and make me an admin! <a href="https://discordapp.com/users/896817129964335114" style="color:var(--accent);text-decoration:underline" target="_blank" rel="noopener">Reach out on Discord</a>.</p>
+    </aside>
 
-          <!-- Card 3 -->
-          <article class="bg-gray-800 rounded-xl shadow-lg hover:shadow-pink-400 transition-shadow p-6 flex flex-col items-center">
-            <img src="https://cdn.discordapp.com/icons/1229527446110601308/aab79d0fa4dd9e068dd3b5ae9c74ac5b.png?size=256" alt="Astocracy Icon" class="w-24 h-24 rounded-full mb-4 border-2 border-pink-400 object-cover" />
-            <h3 class="text-2xl font-semibold mb-2">Astocracy</h3>
-            <p class="text-sm mb-4 text-center">My quiet personal abode – pop in and liven the place up!</p>
-            <a href="https://discord.gg/jKWhj9cc" target="_blank" class="mt-auto px-4 py-2 bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">Join Server</a>
-          </article>
-
-          <article class="bg-gray-800 rounded-xl shadow-lg hover:shadow-pink-400 transition-shadow p-6 flex flex-col items-center">
-            <img src="https://cdn.discordapp.com/icons/1221940329847197726/a7c13c07c0d3f6d9a87407f0d25c19e6.png?size=600" alt="The Place Icon" class="w-24 h-24 rounded-full mb-4 border-2 border-pink-400 object-cover" />
-            <h3 class="text-2xl font-semibold mb-2">The Place</h3>
-            <p class="text-sm mb-4 text-center">Inactive and chill furry server with an attached minecraft server for application</p>
-            <a href="https://discord.com/invite/WCpcPeDg2d" target="_blank" class="mt-auto px-4 py-2 bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">Join Server</a>
-          </article>
-
-          <article class="bg-gray-800 rounded-xl shadow-lg hover:shadow-pink-400 transition-shadow p-6 flex flex-col items-center">
-            <img src="https://cdn.discordapp.com/icons/1303478588527345714/024e9e2b8fd64643c7c57c87e97e001d.png?size=600" alt="Dartboard Icon" class="w-24 h-24 rounded-full mb-4 border-2 border-pink-400 object-cover" />
-            <h3 class="text-2xl font-semibold mb-2">The Dartboard</h3>
-            <p class="text-sm mb-4 text-center">Friend server with a dying VC community</p>
-            <a href="https://discord.gg/WA87u9CMYp" target="_blank" class="mt-auto px-4 py-2 bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors">Join Server</a>
-          </article>
-        </div>
-
-        <!-- Callout -->
-        <div class="mt-16 bg-gray-800/70 backdrop-blur-md border-l-4 border-pink-400 p-6 rounded-xl max-w-3xl mx-auto">
-          <h3 class="text-2xl font-semibold mb-2">Want to partner up?</h3>
-          <p class="text-sm">If you're interested in collaborating, invite me to your server and make me an admin! <a href="https://discordapp.com/users/896817129964335114" class="underline text-pink-200 hover:text-pink-100">Reach out on Discord</a>.</p>
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-center py-6 text-sm text-pink-200">
-      &copy; 2025 Asteerez. All Rights Reserved.
-    </footer>
-  </body>
+    <footer>© 2025 Asteerez. All Rights Reserved.</footer>
+  </main>
+</body>
 </html>

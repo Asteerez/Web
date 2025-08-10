@@ -1,120 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <!-- Discord Embed Meta Tags -->
-  <meta property="og:title" content="Asteerez | Domain">
-  <meta property="og:description" content="Interweb Dweller">
-  <meta property="og:url" content="https://web.asteerez.xyz">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Asteerez">
-
-<!-- Twitter Card Meta Tags (also used by Discord) -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Asteerez | Domain">
-  <meta name="twitter:description" content="Interweb Dweller Goon Domain">
-
-<!-- Theme Color for Discord -->
-<meta name="theme-color" content="#ec4899">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Asteerez | Domain</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: 'Kanit', sans-serif;
-      }
-    </style>
-  </head>
-  <body class="bg-gradient-to-br from-gray-900 via-purple-800 to-pink-700 text-white scroll-smooth">
-    <!-- Nav -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/90 backdrop-blur-md shadow-md border-b border-pink-400">
-      <nav class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-pink-400">Asteerez</h1>
-        <ul class="flex space-x-6 font-medium">
-          <li><a href="#home" class="hover:text-pink-300">Home</a></li>
-          <li><a href="#about" class="hover:text-pink-300">About</a></li>
-          <li><a href="#portfolio" class="hover:text-pink-300">Portfolio</a></li>
-          <li><a href="index.html" class="text-pink-300 underline underline-offset-4 decoration-pink-400">Home</a></li>
-          <li><a href="affiliate.html" class="hover:text-pink-300">Affiliate</a></li>
-        </ul>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asteerez | Domain</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <style>
+    :root{
+      --bg:#0b0c10; --surface:#11131a; --card:#161922; --ink:#e7e7ee; --muted:#a0a3ad; --accent:#ff2ea6; --accent-2:#b347ff; --ring:rgba(255,46,166,.4)
+    }
+    html,body{background:var(--bg);color:var(--ink);margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px}
+    .topbar{position:sticky;top:0;z-index:40;background:rgba(10,10,14,.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--ring)}
+    .bar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo-dot{color:var(--accent)}
+    .nav{display:flex;gap:18px}
+    .nav a[aria-current="page"]{color:var(--accent);text-decoration:underline;text-underline-offset:6px}
+    .hero{padding:56px 0 28px;display:grid;gap:16px}
+    .kicker{color:var(--accent);letter-spacing:.2em;text-transform:uppercase;font-weight:700;font-size:12px}
+    h1{margin:0;font-size:clamp(30px,5vw,56px);line-height:1.05;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .sub{color:var(--muted);max-width:62ch}
+    /* Cards */
+    .grid{display:grid;gap:18px}
+    @media (min-width:840px){.grid{grid-template-columns:2fr 1fr}}
+    .card{background:var(--card);border:1px solid rgba(255,46,166,.18);border-radius:16px;padding:18px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+    .section-title{font-size:22px;margin:0 0 10px;color:#ffd3f0}
+    .list{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+    .chip{display:inline-flex;gap:10px;align-items:center;background:rgba(255,46,166,.15);border:1px solid rgba(255,46,166,.35);color:#ffd6f4;padding:8px 12px;border-radius:999px}
+    .pill{display:inline-block;padding:3px 8px;border:1px solid rgba(255,46,166,.35);border-radius:999px;color:#ffb4e6;font-size:12px}
+    .socials{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .socials a{display:block;background:var(--surface);padding:12px;border-radius:12px;border:1px solid rgba(255,46,166,.18)}
+    footer{margin:36px 0 0;padding:18px 0;color:#cfcfe4;border-top:1px solid rgba(255,46,166,.2);text-align:center}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="bar">
+      <div class="brand"><span class="logo-dot">●</span><strong>Asteerez</strong></div>
+      <nav class="nav">
+        <a href="affiliate.html">Affiliate</a>
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="shop.html">Shop</a>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <main class="pt-24">
-      <!-- Home / Servers -->
-      <section id="home" class="max-w-5xl mx-auto p-8 text-center">
-        <h2 class="text-4xl font-bold mb-4 text-pink-300">Currently Hosted Servers</h2>
-        <ul class="grid gap-4 mt-6 text-lg">
-          <li><strong>Vanilla Minecraft:</strong> IP, mc.asteerez.xyz, 1.21.3</li>
-        </ul>
-      </section>
+  <main class="wrap">
+    <section class="hero">
+      <span class="kicker">Asteerez | Domain</span>
+      <h1>ME. Made clearly.</h1>
+      <p class="sub">A simple portal to what I’m running and where to find me.</p>
+    </section>
 
-      <!-- About -->
-      <section id="about" class="bg-pink-900/10 py-16 px-6">
-        <div class="max-w-5xl mx-auto">
-          <h2 class="text-4xl font-bold mb-6 text-center text-pink-300">About Asteerez</h2>
-          <p class="text-lg text-center max-w-3xl mx-auto">some dude</p>
-
-          <h3 class="text-2xl font-semibold mt-12 mb-4 text-center">📱 Contact & Socials</h3>
-          <ul class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 text-center">
-            <li class="bg-gray-800 p-4 rounded-lg hover:ring-2 ring-pink-400 transition-transform"><a href="https://discordapp.com/users/896817129964335114" target="_blank">Discord: Asteerez</a></li>
-            <li class="bg-gray-800 p-4 rounded-lg hover:ring-2 ring-pink-400 transition-transform"><a href="https://x.com/Asteerez" target="_blank">Twitter: @Asteerez</a></li>
-            <li class="bg-gray-800 p-4 rounded-lg hover:ring-2 ring-pink-400 transition-transform"><a href="https://www.youtube.com/@Asteerez" target="_blank">YouTube: @Asteerez</a></li>
-            <li class="bg-gray-800 p-4 rounded-lg hover:ring-2 ring-pink-400 transition-transform"><a href="https://github.com/Asteerez" target="_blank">GitHub: Asteerez</a></li>
-            <li class="bg-gray-800 p-4 rounded-lg hover:ring-2 ring-pink-400 transition-transform"><a href="https://steamcommunity.com/id/Asteerez" target="_blank">Steam: Asteerez</a></li>
-            <li class="bg-gray-800 p-4 rounded-lg hover:ring-2 ring-pink-400 transition-transform"><a href="https://open.spotify.com/user/xcdb4t9dqj7pf0hb0ootgk4uv" target="_blank">Spotify: Astrophe</a></li>
+    <section class="grid" aria-label="Overview">
+      <!-- Left: Servers + Portfolio -->
+      <div class="stack" style="display:grid;gap:18px">
+        <div class="card">
+          <h2 class="section-title">Currently Hosted Servers</h2>
+          <ul class="list">
+            <li><span class="chip"><strong>Vanilla Minecraft</strong><span class="pill">1.21.3</span></span> <span style="opacity:.8">IP: <code>mc.asteerez.xyz</code></span></li>
           </ul>
         </div>
-      </section>
 
-      <!-- Portfolio -->
-      <section id="portfolio" class="py-16 px-6">
-        <div class="max-w-5xl mx-auto text-center">
-          <h2 class="text-4xl font-bold mb-6 text-pink-300">🎨 Portfolio</h2>
-          <div class="grid sm:grid-cols-2 gap-8">
-            <div @click="$dispatch('open-modal', { type: 'music' })" class="cursor-pointer bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-pink-400 transition-shadow">
-              <h3 class="text-2xl font-semibold mb-2">🎵 Music</h3>
-              <p>In progress</p>
-            </div>
-            <div @click="$dispatch('open-modal', { type: 'art' })" class="cursor-pointer bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-pink-400 transition-shadow">
-              <h3 class="text-2xl font-semibold mb-2">🎨 Art</h3>
-              <p>In progress</p>
-            </div>
+        <div class="card">
+          <h2 class="section-title">🎨 Portfolio</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+            <a class="socials__item" href="#" style="display:block;background:var(--surface);padding:16px;border-radius:12px;border:1px solid rgba(255,46,166,.18)">
+              <h3 style="margin:0 0 6px">🎵 Music</h3>
+              <p style="margin:0;color:var(--muted)">In progress</p>
+            </a>
+            <a class="socials__item" href="#" style="display:block;background:var(--surface);padding:16px;border-radius:12px;border:1px solid rgba(255,46,166,.18)">
+              <h3 style="margin:0 0 6px">🎨 Art</h3>
+              <p style="margin:0;color:var(--muted)">In progress</p>
+            </a>
           </div>
         </div>
-      </section>
-    </main>
-
-    <!-- Modals -->
-    <div x-data="{ show: false, type: null }" 
-         x-on:open-modal.window="show = true; type = $event.detail.type" 
-         x-show="show"
-         class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-      <div class="bg-white text-black rounded-xl p-6 w-11/12 max-w-2xl relative" @click.outside="show = false">
-        <h3 class="text-2xl font-bold mb-4" x-text="type === 'music' ? 'Music Portfolio' : 'Art Portfolio'"></h3>
-        <template x-if="type === 'music'">
-          <div class="space-y-4">
-            <p class="text-sm text-gray-700">work in progress</p>
-            <div class="bg-gray-200 h-32 rounded-md flex items-center justify-center text-gray-600">[Music Embed Placeholder]</div>
-          </div>
-        </template>
-        <template x-if="type === 'art'">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-gray-200 h-32 rounded-md flex items-center justify-center text-gray-600">[Art 1]</div>
-            <div class="bg-gray-200 h-32 rounded-md flex items-center justify-center text-gray-600">[Art 2]</div>
-            <div class="bg-gray-200 h-32 rounded-md flex items-center justify-center text-gray-600">[Art 3]</div>
-            <div class="bg-gray-200 h-32 rounded-md flex items-center justify-center text-gray-600">[Art 4]</div>
-          </div>
-        </template>
-        <button class="absolute top-2 right-2 text-sm px-3 py-1 bg-pink-600 text-white rounded hover:bg-pink-700" @click="show = false">Close</button>
       </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-center py-6 mt-12 text-sm text-pink-200">
-      &copy; 2025 Asteerez. All Rights Reserved.
-    </footer>
-  </body>
+      <!-- Right: About + Socials -->
+      <aside class="card">
+        <h2 class="section-title">About Asteerez</h2>
+        <p style="margin-top:6px;color:var(--muted)">some dude</p>
+        <h3 style="margin:16px 0 10px">Contact &amp; Socials</h3>
+        <div class="socials">
+          <a href="https://discordapp.com/users/896817129964335114" target="_blank" rel="noopener">Discord: Asteerez</a>
+          <a href="https://x.com/Asteerez" target="_blank" rel="noopener">Twitter: @Asteerez</a>
+          <a href="https://www.youtube.com/@Asteerez" target="_blank" rel="noopener">YouTube: @Asteerez</a>
+          <a href="https://github.com/Asteerez" target="_blank" rel="noopener">GitHub: Asteerez</a>
+          <a href="https://steamcommunity.com/id/Asteerez" target="_blank" rel="noopener">Steam: Asteerez</a>
+          <a href="https://open.spotify.com/user/xcdb4t9dqj7pf0hb0ootgk4uv" target="_blank" rel="noopener">Spotify: Astrophe</a>
+        </div>
+      </aside>
+    </section>
+
+    <footer>© 2025 Asteerez. All Rights Reserved.</footer>
+  </main>
+</body>
 </html>

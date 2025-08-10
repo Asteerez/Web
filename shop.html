@@ -1,115 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<script src="https://kit.fontawesome.com/6791628250.js" crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pterafly</title>
-    <style>
-		body {
-			font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
-			background-color: #222222;
-			margin: 0;
-			padding: 0;
-		}
-		header {
-			background-color: #424242;
-			display: flex;
-			padding: 10px;
-			padding-left: 60px;
-		}
-		header h2 {
-			color: #FFFFFF;
-			font-size: 30px;
-			text-align: left;
-			display: block;
-			font-family: "Russo One"
-		}
-		nav {
-			display: flex;
-			background-color: #353535;
-			padding-left: 20px;
-			color: white;
-			word-spacing: 60px
-		}
-		
-		.navi ul {
-			list-style: none;
-			align-content: flex-start;
-		}
-		.navi li {
-			display: inline;
-		}
-		.navi a {
-			text-decoration: none;
-			color: inherit;
-		}
-		.asteerez:hover {
-			color: magenta;
-		}
-		.dart:hover {
-			color: red;
-		}
-		.pterafly:hover {
-			color: #42FF00;
-		}
-		.container {
-    		display: flex; /* Use flexbox for layout */
-    		align-items: center; /* Center vertically */ 
-			margin: 20px;/* Take the full viewport height */
-    		color: white;
-		}
-		.infobox {
-			display: flex;
-			align-items: center;
-			position: relative;
-			color: white;
-		}
-		.infocontainerleft, .infocontainerright {
-			flex: 1;
-			text-align: center;
-			background-color: #333;
-			border: 1px solid #444;
-			margin: 0 10px;
-			border-radius: 5px
-			
-		}
-		.columnleft, .columnmiddle, .columnright {
-    		flex: 1; /* Ensure all boxes have equal width */
-    		margin: 0 10px; /* Add some spacing between the boxes */
-    		background-color: #333; /* Example background color for visibility */
-    		text-align: center; /* Center text inside the box */
-    		padding: 20px; /* Add padding inside the boxes */
-    		border: 1px Solid #444;
-			border-radius: 10px /* Add borders for better visibility */
-		}
-			
-    </style>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>pterafly | Shop</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <style>
+    :root{
+      /* Charcoal-forward palette */
+      --bg:#0f1012; --surface:#15171b; --card:#1a1d22; --ink:#e6e8ed; --muted:#a7acb6; --accent:#8b93a5; --ring:rgba(139,147,165,.35)
+    }
+    html,body{background:var(--bg);color:var(--ink);margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px}
+    .topbar{position:sticky;top:0;z-index:40;background:rgba(12,13,15,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--ring)}
+    .bar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo-dot{color:var(--accent)}
+    .nav{display:flex;gap:18px}
+    .nav a[aria-current="page"]{color:#cfd5e3;text-decoration:underline;text-underline-offset:6px}
+    .hero{padding:46px 0 10px}
+    h1{margin:0;font-size:clamp(28px,4.6vw,48px)}
+    .sub{margin:8px 0 0;color:var(--muted)}
+    /* Row layout */
+    .row{display:grid;gap:18px}
+    @media (min-width:920px){.row{grid-template-columns:1.25fr .75fr}}
+    .panel{background:var(--card);border:1px solid var(--ring);border-radius:16px;padding:18px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+    .panel h2{margin:0 0 10px;font-size:22px}
+    .divider{height:1px;background:var(--ring);margin:12px 0}
+    .muted{color:var(--muted)}
+    .contact{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--ring);padding:8px 12px;border-radius:999px}
+    .price-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+    .price{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:12px}
+    footer{margin:36px 0 0;padding:18px 0;color:#cfd3dd;border-top:1px solid var(--ring);text-align:center}
+    code{padding:2px 6px;border-radius:6px;background:var(--surface);border:1px solid var(--ring)}
+  </style>
 </head>
 <body>
-    <header>
-		<h2>PTERAFLY</h2>
-    </header>
-	<nav>
-		<ul class="navi">
-			<li><i class="fa-solid fa-star"></i><a class="asteerez" href="https://web.asteerez.xyz">-Asteerez</a></li>
-			<li><i class="fa-brands fa-x-twitter"></i><a class="dart" href="https://x.com/NtHungarianDart">-Dart</a></li>
-			<li><i class="fa-solid fa-house"></i><a class="pterafly" href="shop.html">-Homepage</a></li>
-			<li><i class="fa-solid fa-image"></i><a class="pterafly">-Stickers</a></li>
-        </ul>
-	</nav>
-<div class="container">
-		<div class="columnleft"><h2>Sticker Comms</h2>
-	</div>
-		<div class="columnmiddle"><h2>Pricing</h2></div>
-	</div>
-<div class="infobox">
-		<div class="infocontainerleft">
-  			<p>Contact Dart or Asteerez (in the links above) with the image you would like stickerized, the requested size and amount of stickers desired.</p></div>
-		<div class="infocontainerright">
-			<p>Pricing is determined by sticker size and quantity; prices can be negotiated during the contact so we can make a fair deal, alongside any needed changes for stickerization</p>
-		</div>
-	</div>
+  <header class="topbar">
+    <div class="bar">
+      <div class="brand"><span class="logo-dot">●</span><strong>pterafly</strong></div>
+      <nav class="nav">
+        <a href="affiliate.html">Affiliate</a>
+        <a href="index.html">Home</a>
+        <a href="shop.html" aria-current="page">Shop</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>PTERAFLY</h1>
+      <p class="sub">Sticker commissions presented in a clean, professional charcoal layout.</p>
+    </section>
+
+    <section class="row" aria-label="Sticker Services">
+      <!-- Left: Sticker Comms (original wording preserved) -->
+      <article class="panel">
+        <h2>Sticker Comms</h2>
+        <div class="divider"></div>
+        <p>Contact Dart or Asteerez (in the links above) with the image you would like stickerized, the requested size and amount of stickers desired.</p>
+        <div class="contact">
+          <a class="chip" href="https://x.com/NtHungarianDart" target="_blank" rel="noopener">Twitter: @NtHungarianDart</a>
+          <a class="chip" href="https://web.asteerez.xyz" target="_blank" rel="noopener">Asteerez Website</a>
+        </div>
+      </article>
+
+      <!-- Right: Pricing (original wording preserved) -->
+      <aside class="panel">
+        <h2>Pricing</h2>
+        <div class="divider"></div>
+        <p class="muted">Pricing is determined by sticker size and quantity; prices can be negotiated during the contact so we can make a fair deal, alongside any needed changes for stickerization</p>
+        <div class="price-grid" aria-label="Example pricing shells">
+          <div class="price"><strong>2" Vinyl</strong><div class="muted">Bulk tiers available</div></div>
+          <div class="price"><strong>3" Vinyl</strong><div class="muted">Bulk tiers available</div></div>
+          <div class="price"><strong>4" Vinyl</strong><div class="muted">Bulk tiers available</div></div>
+        </div>
+      </aside>
+    </section>
+
+    <footer>© 2025 pterafly. All Rights Reserved.</footer>
+  </main>
 </body>
 </html>
