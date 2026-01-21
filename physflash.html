@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IB Physics DP Year 1 — Variable Flashcards</title>
+  <style>
+    :root { --bg:#0b0f17; --panel:#121a28; --text:#e8eefc; --muted:#a6b2d6; --line:#22304a; }
+    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body{ margin:0; background:var(--bg); color:var(--text); }
+    .wrap{ max-width:1000px; margin:0 auto; padding:18px; display:grid; gap:14px; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .panel{ background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
+    h1{ font-size:18px; margin:0; }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      min-height:220px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .big{ font-size:54px; font-weight:750; letter-spacing:0.5px; }
+    .sub{ color:var(--muted); line-height:1.35; white-space:pre-wrap; }
+    .badge{ font-size:12px; color:var(--muted); border:1px solid var(--line); padding:4px 8px; border-radius:999px; }
+    button, select, input, textarea{
+      background:#0f1624; color:var(--text); border:1px solid var(--line);
+      border-radius:10px; padding:10px 12px; font-size:14px;
+    }
+    button{ cursor:pointer; }
+    button:hover{ border-color:#35507e; }
+    .good{ border-color:#2f7a4e; }
+    .bad{ border-color:#8a3a3a; }
+    .ghost{ opacity:0.85; }
+    .stats{ display:flex; gap:10px; flex-wrap:wrap; }
+    .stat{ padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:#0f1624; }
+    .stat b{ display:block; font-size:16px; }
+    .grid2{ display:grid; grid-template-columns: 1.3fr 0.7fr; gap:14px; }
+    @media (max-width: 880px){ .grid2{ grid-template-columns: 1fr; } .big{ font-size:44px; } }
+    .tiny{ font-size:12px; color:var(--muted); }
+    .hr{ height:1px; background:var(--line); margin:10px 0; }
+    .pillbar{ display:flex; gap:8px; flex-wrap:wrap; }
+    .pillbar label{ display:flex; gap:8px; align-items:center; padding:8px 10px; border:1px solid var(--line); border-radius:999px; background:#0f1624; color:var(--muted); }
+    .pillbar input{ width:16px; height:16px; }
+    .right{ margin-left:auto; }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel row">
+      <h1>IB Physics DP Year 1 — Variable Flashcards</h1>
+      <span class="badge" id="deckInfo">Deck</span>
+      <span class="right tiny" id="saveHint">Auto-saves stats locally</span>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between;">
+          <div class="row">
+            <span class="badge">Mode</span>
+            <select id="mode">
+              <option value="symbol_to_meaning">Symbol → meaning</option>
+              <option value="meaning_to_symbol">Meaning → symbol</option>
+              <option value="units_to_symbol">Units → symbol</option>
+              <option value="symbol_to_units">Symbol → units</option>
+            </select>
+
+            <span class="badge">Order</span>
+            <select id="order">
+              <option value="smart">Smart (prioritize misses)</option>
+              <option value="random">Random</option>
+              <option value="sequential">Sequential</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <button id="revealBtn" class="ghost">Reveal</button>
+            <button id="nextBtn">Next</button>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="card" id="card">
+          <div class="tiny" id="frontLabel">Front</div>
+          <div class="big mono" id="front">v</div>
+          <div class="hr"></div>
+          <div class="tiny" id="backLabel">Back (hidden)</div>
+          <div class="sub" id="back" style="display:none;"></div>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <button id="knewBtn" class="good">I knew it</button>
+          <button id="missedBtn" class="bad">I missed it</button>
+          <button id="resetCardBtn" class="ghost">Reset card stats</button>
+          <button id="resetAllBtn" class="ghost">Reset all stats</button>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="stats">
+          <div class="stat"><b id="seen">0</b><span class="tiny">Seen</span></div>
+          <div class="stat"><b id="correct">0</b><span class="tiny">Correct</span></div>
+          <div class="stat"><b id="incorrect">0</b><span class="tiny">Incorrect</span></div>
+          <div class="stat"><b id="accuracy">0%</b><span class="tiny">Accuracy</span></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="tiny">
+          IB note: some symbols repeat across topics (e.g., <span class="mono">p</span> = pressure vs momentum; <span class="mono">I</span> = current vs moment of inertia).
+          Use the Topic filter + meaning text to disambiguate.
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <span class="badge">Topics</span>
+          <span class="tiny">(filter deck)</span>
+        </div>
+        <div class="pillbar" id="topicFilters"></div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <span class="badge">Search</span>
+          <input id="search" placeholder="e.g., centripetal, Ω, latent heat, λ" style="flex:1;" />
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <span class="badge">Deck tools</span>
+        </div>
+        <div class="row">
+          <button id="exportBtn">Export deck + stats (JSON)</button>
+          <button id="importBtn">Import JSON</button>
+        </div>
+        <textarea id="io" rows="10" placeholder="Export appears here. Paste JSON here to import." style="width:100%; margin-top:10px;"></textarea>
+
+        <div class="hr"></div>
+
+        <div class="tiny">
+          To tailor to your exact class sequence, edit <span class="mono">BASE_DECK</span> below (add/remove cards or topics).
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/** ========= IB DP Physics Year 1 deck =========
+ * fields: id, symbol, name, units, topic, notes, examples[]
+ */
+const BASE_DECK = [
+  // 1) Measurements & Uncertainties (essentials)
+  {id:"meas_l", symbol:"l", name:"length", units:"m", topic:"Measurements", notes:"Measured dimension; can be used as a generic length or distance in many contexts.", examples:["Area A = l w","Volume V = l w h"]},
+  {id:"meas_t", symbol:"t", name:"time", units:"s", topic:"Measurements", notes:"Elapsed time.", examples:["v = Δs/Δt"]},
+  {id:"meas_m", symbol:"m", name:"mass", units:"kg", topic:"Measurements", notes:"Inertial mass (resistance to acceleration).", examples:["F = m a","p = m v"]},
+  {id:"meas_A", symbol:"A", name:"area", units:"m²", topic:"Measurements", notes:"Surface area / cross-sectional area (context).", examples:["p = F/A","R = ρ l / A"]},
+  {id:"meas_V", symbol:"V", name:"volume", units:"m³", topic:"Measurements", notes:"Volume of a region; in gas laws, volume of gas.", examples:["pV = nRT"]},
+  {id:"meas_rho", symbol:"ρ", name:"density", units:"kg·m⁻³", topic:"Measurements", notes:"Mass per unit volume.", examples:["ρ = m/V"]},
+  {id:"meas_uabs", symbol:"Δx", name:"absolute uncertainty in x", units:"same as x", topic:"Measurements", notes:"Uncertainty expressed in the same unit as the measured quantity.", examples:["x = (2.50 ± 0.05) m"]},
+  {id:"meas_urel", symbol:"Δx/x", name:"fractional uncertainty", units:"unitless", topic:"Measurements", notes:"Relative uncertainty (often quoted as a fraction or percentage).", examples:["% uncertainty = (Δx/x)×100%"]},
+
+  // 2) Mechanics — Kinematics
+  {id:"kin_s", symbol:"s", name:"displacement", units:"m", topic:"Kinematics", notes:"Change in position (vector in general). Many IB problems treat 1D along an axis.", examples:["v = Δs/Δt","s = ut + ½at²"]},
+  {id:"kin_x", symbol:"x", name:"position", units:"m", topic:"Kinematics", notes:"Position coordinate (1D/axis).", examples:["Δx = x_f − x_i"]},
+  {id:"kin_v", symbol:"v", name:"velocity", units:"m·s⁻¹", topic:"Kinematics", notes:"Rate of change of displacement. Vector quantity.", examples:["v = u + at"]},
+  {id:"kin_u", symbol:"u", name:"initial velocity", units:"m·s⁻¹", topic:"Kinematics", notes:"Standard IB kinematics symbol for initial velocity.", examples:["v = u + at","v² = u² + 2as"]},
+  {id:"kin_a", symbol:"a", name:"acceleration", units:"m·s⁻²", topic:"Kinematics", notes:"Rate of change of velocity.", examples:["a = Δv/Δt"]},
+  {id:"kin_g", symbol:"g", name:"gravitational field strength (near Earth)", units:"N·kg⁻¹ (≡ m·s⁻²)", topic:"Kinematics", notes:"Often used as ~9.81 m·s⁻² for near-Earth motion.", examples:["Weight W = mg"]},
+
+  // 2) Mechanics — Forces & Dynamics
+  {id:"dyn_F", symbol:"F", name:"force", units:"N (kg·m·s⁻²)", topic:"Dynamics", notes:"Interaction that can cause acceleration.", examples:["ΣF = ma"]},
+  {id:"dyn_Wt", symbol:"W", name:"weight (gravitational force)", units:"N", topic:"Dynamics", notes:"Weight is a force: W = mg (near Earth).", examples:["W = mg"]},
+  {id:"dyn_N", symbol:"N", name:"normal reaction force", units:"N", topic:"Dynamics", notes:"Contact force perpendicular to surface.", examples:["On level ground, N ≈ mg if no vertical acceleration"]},
+  {id:"dyn_f", symbol:"f", name:"frictional force", units:"N", topic:"Dynamics", notes:"Resistive contact force; direction opposes relative motion (or tendency).", examples:["f_k = μ_k N","f_s ≤ μ_s N"]},
+  {id:"dyn_mu", symbol:"μ", name:"coefficient of friction", units:"unitless", topic:"Dynamics", notes:"Dimensionless proportionality constant for friction models.", examples:["f_k = μ_k N"]},
+  {id:"dyn_k", symbol:"k", name:"spring constant", units:"N·m⁻¹", topic:"Dynamics", notes:"Stiffness of a spring in Hooke’s law.", examples:["F = kx (magnitude)","E_e = ½kx²"]},
+  {id:"dyn_xe", symbol:"x", name:"extension/compression (spring)", units:"m", topic:"Dynamics", notes:"Deformation of a spring from natural length.", examples:["F = kx"]},
+
+  // 2) Mechanics — Momentum
+  {id:"mom_p", symbol:"p", name:"momentum", units:"kg·m·s⁻¹", topic:"Momentum", notes:"Vector; conserved in isolated systems.", examples:["p = mv"]},
+  {id:"mom_J", symbol:"J", name:"impulse", units:"N·s (≡ kg·m·s⁻¹)", topic:"Momentum", notes:"Change in momentum due to a force over time.", examples:["J = FΔt = Δp"]},
+  {id:"mom_Favg", symbol:"F_avg", name:"average force", units:"N", topic:"Momentum", notes:"Average force over a time interval.", examples:["F_avg = Δp/Δt"]},
+
+  // 2) Mechanics — Work, Energy, Power
+  {id:"we_W", symbol:"W", name:"work done", units:"J (N·m)", topic:"Energy", notes:"Energy transferred by a force through displacement.", examples:["W = F s cosθ","W = ΔE"]},
+  {id:"we_E", symbol:"E", name:"energy", units:"J", topic:"Energy", notes:"Capacity to do work; appears in many forms.", examples:["ΔE = W (mechanical transfer)"]},
+  {id:"we_Ek", symbol:"E_k", name:"kinetic energy", units:"J", topic:"Energy", notes:"Energy of motion.", examples:["E_k = ½mv²"]},
+  {id:"we_Ep", symbol:"E_p", name:"gravitational potential energy (near Earth)", units:"J", topic:"Energy", notes:"For uniform g: E_p = mgh.", examples:["E_p = mgh"]},
+  {id:"we_Ee", symbol:"E_e", name:"elastic potential energy", units:"J", topic:"Energy", notes:"Energy stored in a spring.", examples:["E_e = ½kx²"]},
+  {id:"we_P", symbol:"P", name:"power", units:"W (J·s⁻¹)", topic:"Energy", notes:"Rate of energy transfer / doing work.", examples:["P = W/t","P = Fv (constant v, collinear)"]},
+  {id:"we_eta", symbol:"η", name:"efficiency", units:"unitless (or %)", topic:"Energy", notes:"Useful output / total input.", examples:["η = (useful power out)/(power in)"]},
+
+  // 6) Circular Motion & Basic Rotation (often Year 1 depending on sequence)
+  {id:"circ_r", symbol:"r", name:"radius", units:"m", topic:"Circular Motion", notes:"Distance from center of circular path.", examples:["a_c = v²/r"]},
+  {id:"circ_omega", symbol:"ω", name:"angular speed", units:"rad·s⁻¹", topic:"Circular Motion", notes:"Rate of change of angular displacement.", examples:["v = rω","ω = 2π/T"]},
+  {id:"circ_T", symbol:"T", name:"period", units:"s", topic:"Circular Motion", notes:"Time for one revolution (or one cycle).", examples:["ω = 2π/T","f = 1/T"]},
+  {id:"circ_f", symbol:"f", name:"frequency", units:"Hz (s⁻¹)", topic:"Circular Motion", notes:"Revolutions per second.", examples:["f = 1/T"]},
+  {id:"circ_ac", symbol:"a_c", name:"centripetal acceleration", units:"m·s⁻²", topic:"Circular Motion", notes:"Acceleration toward the center of circular path.", examples:["a_c = v²/r = rω²"]},
+  {id:"circ_Fc", symbol:"F_c", name:"centripetal force", units:"N", topic:"Circular Motion", notes:"Net inward force required for circular motion.", examples:["F_c = mv²/r"]},
+
+  // Rotation (selected)
+  {id:"rot_tau", symbol:"τ", name:"torque (moment of force)", units:"N·m", topic:"Rotation", notes:"Turning effect of a force.", examples:["τ = rF sinθ"]},
+  {id:"rot_I", symbol:"I", name:"moment of inertia", units:"kg·m²", topic:"Rotation", notes:"Rotational analogue of mass; depends on axis.", examples:["τ = Iα"]},
+  {id:"rot_alpha", symbol:"α", name:"angular acceleration", units:"rad·s⁻²", topic:"Rotation", notes:"Rate of change of angular speed.", examples:["α = Δω/Δt"]},
+  {id:"rot_L", symbol:"L", name:"angular momentum", units:"kg·m²·s⁻¹", topic:"Rotation", notes:"Conserved if net external torque is zero.", examples:["L = Iω (rigid body about fixed axis)"]},
+
+  // Gravitation (basic)
+  {id:"grav_G", symbol:"G", name:"gravitational constant", units:"N·m²·kg⁻²", topic:"Gravitation", notes:"Universal gravitational constant.", examples:["F = GMm/r²"]},
+  {id:"grav_M", symbol:"M", name:"mass (central body)", units:"kg", topic:"Gravitation", notes:"Mass of planet/star producing gravitational field.", examples:["g = GM/r²"]},
+  {id:"grav_F", symbol:"F", name:"gravitational force", units:"N", topic:"Gravitation", notes:"Attractive force between masses.", examples:["F = GMm/r²"]},
+
+  // 3) Thermal Physics
+  {id:"th_T", symbol:"T", name:"temperature", units:"K", topic:"Thermal", notes:"Thermodynamic temperature (Kelvin).", examples:["pV = nRT"]},
+  {id:"th_dT", symbol:"ΔT", name:"temperature change", units:"K", topic:"Thermal", notes:"Temperature difference/change; in Kelvin or °C difference (numerically same).", examples:["Q = mcΔT"]},
+  {id:"th_Q", symbol:"Q", name:"thermal energy transferred (heat)", units:"J", topic:"Thermal", notes:"Energy transferred due to temperature difference.", examples:["Q = mcΔT","Q = mL"]},
+  {id:"th_c", symbol:"c", name:"specific heat capacity", units:"J·kg⁻¹·K⁻¹", topic:"Thermal", notes:"Energy to raise 1 kg by 1 K.", examples:["Q = mcΔT"]},
+  {id:"th_C", symbol:"C", name:"heat capacity", units:"J·K⁻¹", topic:"Thermal", notes:"Energy to raise an object’s temperature by 1 K (for entire object).", examples:["Q = CΔT"]},
+  {id:"th_L", symbol:"L", name:"specific latent heat", units:"J·kg⁻¹", topic:"Thermal", notes:"Energy per kg for phase change at constant temperature.", examples:["Q = mL"]},
+  {id:"th_p", symbol:"p", name:"pressure", units:"Pa (N·m⁻²)", topic:"Thermal", notes:"Force per area; also used in gases.", examples:["p = F/A","pV = nRT"]},
+  {id:"th_n", symbol:"n", name:"amount of substance", units:"mol", topic:"Thermal", notes:"Number of moles.", examples:["pV = nRT"]},
+  {id:"th_R", symbol:"R", name:"molar gas constant", units:"J·mol⁻¹·K⁻¹", topic:"Thermal", notes:"Gas constant in ideal gas law.", examples:["pV = nRT"]},
+  {id:"th_U", symbol:"U", name:"internal energy", units:"J", topic:"Thermal", notes:"Total microscopic kinetic + potential energy of particles.", examples:["ΔU = Q − W"]},
+  {id:"th_W", symbol:"W", name:"work done by the gas", units:"J", topic:"Thermal", notes:"In thermodynamics sign convention, W is often work done by the system.", examples:["ΔU = Q − W"]},
+  {id:"th_kB", symbol:"k_B", name:"Boltzmann constant", units:"J·K⁻¹", topic:"Thermal", notes:"Relates temperature to energy per particle.", examples:["Average translational KE ∝ k_BT"]},
+
+  // 4) Waves (incl. basic optics)
+  {id:"wav_A", symbol:"A", name:"amplitude", units:"m (context-dependent)", topic:"Waves", notes:"Maximum displacement from equilibrium.", examples:["I ∝ A² (many wave contexts)"]},
+  {id:"wav_lambda", symbol:"λ", name:"wavelength", units:"m", topic:"Waves", notes:"Distance between points in phase (e.g., crest-to-crest).", examples:["v = fλ"]},
+  {id:"wav_f", symbol:"f", name:"frequency", units:"Hz (s⁻¹)", topic:"Waves", notes:"Number of cycles per second.", examples:["v = fλ","f = 1/T"]},
+  {id:"wav_T", symbol:"T", name:"period", units:"s", topic:"Waves", notes:"Time for one cycle.", examples:["T = 1/f"]},
+  {id:"wav_v", symbol:"v", name:"wave speed", units:"m·s⁻¹", topic:"Waves", notes:"Propagation speed of the wave.", examples:["v = fλ"]},
+  {id:"wav_I", symbol:"I", name:"intensity", units:"W·m⁻²", topic:"Waves", notes:"Power per unit area carried by a wave.", examples:["I = P/A"]},
+
+  // Optics basics
+  {id:"opt_n", symbol:"n", name:"refractive index", units:"unitless", topic:"Optics", notes:"n = c / v (light).", examples:["n = c/v","Snell: n1 sinθ1 = n2 sinθ2"]},
+  {id:"opt_c", symbol:"c", name:"speed of light in vacuum", units:"m·s⁻¹", topic:"Optics", notes:"Constant: c ≈ 3.00×10⁸ m·s⁻¹.", examples:["c = fλ"]},
+  {id:"opt_theta", symbol:"θ", name:"angle (incidence/refraction/etc.)", units:"rad (or degrees)", topic:"Optics", notes:"Angles are often in degrees in optics problems; radians for calculus/rotation.", examples:["Snell: n1 sinθ1 = n2 sinθ2"]},
+  {id:"opt_flen", symbol:"f", name:"focal length", units:"m", topic:"Optics", notes:"Lens/mirror focal length (thin lens approximation).", examples:["1/f = 1/u + 1/v"]},
+  {id:"opt_u", symbol:"u", name:"object distance", units:"m", topic:"Optics", notes:"Distance from object to lens/mirror (sign conventions apply).", examples:["1/f = 1/u + 1/v"]},
+  {id:"opt_v", symbol:"v", name:"image distance", units:"m", topic:"Optics", notes:"Distance from image to lens/mirror (sign conventions apply).", examples:["1/f = 1/u + 1/v"]},
+
+  // 5) Electricity & Magnetism — Circuits
+  {id:"elec_q", symbol:"Q", name:"electric charge", units:"C", topic:"Electricity", notes:"Amount of charge.", examples:["I = ΔQ/Δt","Q = CV"]},
+  {id:"elec_I", symbol:"I", name:"electric current", units:"A (C·s⁻¹)", topic:"Electricity", notes:"Rate of flow of charge.", examples:["I = ΔQ/Δt"]},
+  {id:"elec_V", symbol:"V", name:"potential difference (voltage)", units:"V (J·C⁻¹)", topic:"Electricity", notes:"Energy per unit charge.", examples:["V = W/Q","V = IR"]},
+  {id:"elec_eps", symbol:"ε", name:"emf (electromotive force)", units:"V", topic:"Electricity", notes:"Energy supplied per unit charge by a source (often open-circuit voltage).", examples:["ε = V + Ir (internal resistance model)"]},
+  {id:"elec_R", symbol:"R", name:"resistance", units:"Ω (V·A⁻¹)", topic:"Electricity", notes:"Opposition to current.", examples:["V = IR"]},
+  {id:"elec_r", symbol:"r", name:"internal resistance", units:"Ω", topic:"Electricity", notes:"Internal resistance of a source; causes lost volts.", examples:["Terminal V = ε − Ir"]},
+  {id:"elec_P", symbol:"P", name:"electrical power", units:"W", topic:"Electricity", notes:"Rate of electrical energy transfer.", examples:["P = IV","P = I²R","P = V²/R"]},
+  {id:"elec_E", symbol:"E", name:"electric field strength", units:"N·C⁻¹ (or V·m⁻¹)", topic:"Electricity", notes:"Force per unit charge (vector).", examples:["E = F/Q","Uniform field: E = V/d"]},
+  {id:"elec_C", symbol:"C", name:"capacitance", units:"F (C·V⁻¹)", topic:"Electricity", notes:"Charge stored per volt.", examples:["Q = CV"]},
+  {id:"elec_rho", symbol:"ρ", name:"resistivity", units:"Ω·m", topic:"Electricity", notes:"Material property; higher ρ means less conductive.", examples:["R = ρl/A"]},
+
+  // Magnetism (select)
+  {id:"mag_B", symbol:"B", name:"magnetic flux density", units:"T", topic:"Magnetism", notes:"Field strength in tesla.", examples:["F = BIL sinθ","F = qvB sinθ"]},
+  {id:"mag_Phi", symbol:"Φ", name:"magnetic flux", units:"Wb", topic:"Magnetism", notes:"Flux through area: Φ = BA cosθ (uniform field).", examples:["Φ = BA cosθ"]},
+  {id:"mag_F", symbol:"F", name:"magnetic force", units:"N", topic:"Magnetism", notes:"Force on a current or moving charge in a magnetic field.", examples:["F = BIL sinθ","F = qvB sinθ"]},
+
+  // 7) Atomic / Constants (small set; remove if your Year 1 does not cover it)
+  {id:"atom_h", symbol:"h", name:"Planck constant", units:"J·s", topic:"Atomic", notes:"Relates photon energy to frequency.", examples:["E = hf"]},
+  {id:"atom_e", symbol:"e", name:"elementary charge", units:"C", topic:"Atomic", notes:"Magnitude of charge of proton/electron.", examples:["Q = ne"]},
+  {id:"atom_mu", symbol:"u", name:"atomic mass unit", units:"kg", topic:"Atomic", notes:"Sometimes written m_u; used for nuclear/atomic masses.", examples:["1 u ≈ 1.66×10⁻²⁷ kg"]},
+  {id:"atom_Eph", symbol:"E", name:"photon energy", units:"J", topic:"Atomic", notes:"Energy of a photon.", examples:["E = hf = hc/λ"]}
+];
+
+// Local storage keys
+const LS_DECK = "ibphys_y1_deck_v1";
+const LS_STATS = "ibphys_y1_stats_v1";
+const LS_PREFS = "ibphys_y1_prefs_v1";
+
+function loadDeck() {
+  const raw = localStorage.getItem(LS_DECK);
+  if (!raw) return structuredClone(BASE_DECK);
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) return structuredClone(BASE_DECK);
+    return parsed;
+  } catch { return structuredClone(BASE_DECK); }
+}
+function saveDeck(deck){ localStorage.setItem(LS_DECK, JSON.stringify(deck)); }
+
+function loadStats(){
+  const raw = localStorage.getItem(LS_STATS);
+  if (!raw) return {};
+  try { return JSON.parse(raw) || {}; } catch { return {}; }
+}
+function saveStats(stats){ localStorage.setItem(LS_STATS, JSON.stringify(stats)); }
+
+function loadPrefs(){
+  const raw = localStorage.getItem(LS_PREFS);
+  if (!raw) return { mode:"symbol_to_meaning", order:"smart", topics:null, search:"" };
+  try { return JSON.parse(raw) || {}; } catch { return { mode:"symbol_to_meaning", order:"smart", topics:null, search:"" }; }
+}
+function savePrefs(prefs){ localStorage.setItem(LS_PREFS, JSON.stringify(prefs)); }
+
+// Smart ordering: weight cards by (misses + 1) / (hits + 1)
+function weightFor(card, stats){
+  const s = stats[card.id] || {seen:0, correct:0, incorrect:0};
+  return (s.incorrect + 1) / (s.correct + 1);
+}
+
+let deck = loadDeck();
+let stats = loadStats();
+let prefs = loadPrefs();
+
+const modeEl = document.getElementById("mode");
+const orderEl = document.getElementById("order");
+const frontEl = document.getElementById("front");
+const backEl = document.getElementById("back");
+const frontLabelEl = document.getElementById("frontLabel");
+const backLabelEl = document.getElementById("backLabel");
+const revealBtn = document.getElementById("revealBtn");
+const nextBtn = document.getElementById("nextBtn");
+const knewBtn = document.getElementById("knewBtn");
+const missedBtn = document.getElementById("missedBtn");
+const resetCardBtn = document.getElementById("resetCardBtn");
+const resetAllBtn = document.getElementById("resetAllBtn");
+const seenEl = document.getElementById("seen");
+const correctEl = document.getElementById("correct");
+const incorrectEl = document.getElementById("incorrect");
+const accuracyEl = document.getElementById("accuracy");
+const deckInfoEl = document.getElementById("deckInfo");
+const topicFiltersEl = document.getElementById("topicFilters");
+const searchEl = document.getElementById("search");
+const exportBtn = document.getElementById("exportBtn");
+const importBtn = document.getElementById("importBtn");
+const ioEl = document.getElementById("io");
+
+modeEl.value = prefs.mode || "symbol_to_meaning";
+orderEl.value = prefs.order || "smart";
+searchEl.value = prefs.search || "";
+
+let activeTopics = prefs.topics; // null => all
+let currentIndex = 0;
+let currentCard = null;
+let revealed = false;
+
+function allTopics(deck){
+  return Array.from(new Set(deck.map(c => c.topic))).sort((a,b)=>a.localeCompare(b));
+}
+
+function buildTopicFilters(){
+  const topics = allTopics(deck);
+  topicFiltersEl.innerHTML = "";
+  for (const t of topics){
+    const id = "topic_" + t.replace(/\W+/g,"_");
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" id="${id}"><span>${t}</span>`;
+    topicFiltersEl.appendChild(label);
+    const cb = label.querySelector("input");
+    cb.checked = !activeTopics || activeTopics.includes(t);
+    cb.addEventListener("change", () => {
+      const selected = topics.filter(tp => topicFiltersEl.querySelector(`#topic_${tp.replace(/\W+/g,"_")}`).checked);
+      activeTopics = (selected.length === topics.length) ? null : selected;
+      persistPrefs();
+      nextCard(true);
+    });
+  }
+}
+
+function persistPrefs(){
+  prefs.mode = modeEl.value;
+  prefs.order = orderEl.value;
+  prefs.search = searchEl.value;
+  prefs.topics = activeTopics;
+  savePrefs(prefs);
+}
+
+function filteredDeck(){
+  const q = (searchEl.value || "").trim().toLowerCase();
+  return deck.filter(c => {
+    const topicOK = !activeTopics || activeTopics.includes(c.topic);
+    if (!topicOK) return false;
+    if (!q) return true;
+    const hay = [
+      c.symbol, c.name, c.units, c.topic, c.notes, ...(c.examples||[])
+    ].join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+}
+
+function formatBack(card){
+  const ex = (card.examples && card.examples.length)
+    ? "\n\nExamples:\n• " + card.examples.join("\n• ")
+    : "";
+  const notes = card.notes ? `\n\nNotes:\n${card.notes}` : "";
+  return `${card.name}\nUnits: ${card.units}\nTopic: ${card.topic}${notes}${ex}`;
+}
+
+function setCard(card){
+  currentCard = card;
+  revealed = false;
+  backEl.style.display = "none";
+  backLabelEl.textContent = "Back (hidden)";
+
+  const mode = modeEl.value;
+  if (mode === "symbol_to_meaning"){
+    frontLabelEl.textContent = "Prompt: Symbol";
+    frontEl.textContent = card.symbol;
+    backEl.textContent = formatBack(card);
+  } else if (mode === "meaning_to_symbol"){
+    frontLabelEl.textContent = "Prompt: Meaning";
+    frontEl.textContent = card.name;
+    backEl.textContent = `Symbol: ${card.symbol}\nUnits: ${card.units}\nTopic: ${card.topic}\n\nNotes:\n${card.notes || "—"}\n\nExamples:\n• ${(card.examples||["—"]).join("\n• ")}`;
+  } else if (mode === "units_to_symbol"){
+    frontLabelEl.textContent = "Prompt: Units";
+    frontEl.textContent = card.units;
+    backEl.textContent = `Symbol: ${card.symbol}\nMeaning: ${card.name}\nTopic: ${card.topic}\n\nNotes:\n${card.notes || "—"}`;
+  } else if (mode === "symbol_to_units"){
+    frontLabelEl.textContent = "Prompt: Symbol";
+    frontEl.textContent = card.symbol;
+    backEl.textContent = `Units: ${card.units}\nMeaning: ${card.name}\nTopic: ${card.topic}\n\nNotes:\n${card.notes || "—"}`;
+  }
+
+  deckInfoEl.textContent = `${filteredDeck().length} cards (filtered) • ${deck.length} total`;
+}
+
+function reveal(){
+  if (!currentCard) return;
+  revealed = true;
+  backEl.style.display = "block";
+  backLabelEl.textContent = "Back";
+}
+
+function bumpStat(cardId, key){
+  const s = stats[cardId] || {seen:0, correct:0, incorrect:0};
+  s[key] = (s[key] || 0) + 1;
+  if (key !== "seen") s.seen = (s.seen || 0) + 1;
+  stats[cardId] = s;
+  saveStats(stats);
+  renderTotals();
+}
+
+function resetCardStats(cardId){
+  delete stats[cardId];
+  saveStats(stats);
+  renderTotals();
+}
+
+function resetAllStats(){
+  stats = {};
+  saveStats(stats);
+  renderTotals();
+}
+
+function totals(){
+  let seen=0, correct=0, incorrect=0;
+  for (const id in stats){
+    const s = stats[id];
+    seen += s.seen || 0;
+    correct += s.correct || 0;
+    incorrect += s.incorrect || 0;
+  }
+  const attempts = correct + incorrect;
+  const acc = attempts ? Math.round((correct/attempts)*100) : 0;
+  return {seen, correct, incorrect, acc};
+}
+
+function renderTotals(){
+  const t = totals();
+  seenEl.textContent = t.seen;
+  correctEl.textContent = t.correct;
+  incorrectEl.textContent = t.incorrect;
+  accuracyEl.textContent = `${t.acc}%`;
+}
+
+function pickNextCard(forceFresh=false){
+  const pool = filteredDeck();
+  if (pool.length === 0) return null;
+
+  const order = orderEl.value;
+
+  if (order === "sequential"){
+    if (forceFresh) currentIndex = 0;
+    const c = pool[currentIndex % pool.length];
+    currentIndex = (currentIndex + 1) % pool.length;
+    return c;
+  }
+
+  if (order === "random"){
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  // smart
+  const weights = pool.map(c => weightFor(c, stats));
+  const sum = weights.reduce((a,b)=>a+b,0);
+  let r = Math.random() * sum;
+  for (let i=0;i<pool.length;i++){
+    r -= weights[i];
+    if (r <= 0) return pool[i];
+  }
+  return pool[pool.length-1];
+}
+
+function nextCard(forceFresh=false){
+  persistPrefs();
+  const c = pickNextCard(forceFresh);
+  if (!c) {
+    frontLabelEl.textContent = "No cards match your filters";
+    frontEl.textContent = "—";
+    backEl.textContent = "";
+    backEl.style.display = "none";
+    backLabelEl.textContent = "Back (hidden)";
+    deckInfoEl.textContent = `0 cards (filtered) • ${deck.length} total`;
+    return;
+  }
+  setCard(c);
+}
+
+function exportJSON(){
+  const payload = { deck, stats, prefs };
+  ioEl.value = JSON.stringify(payload, null, 2);
+}
+
+function importJSON(){
+  const raw = ioEl.value.trim();
+  if (!raw) return alert("Paste JSON into the box first.");
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.deck && Array.isArray(parsed.deck)) deck = parsed.deck;
+    if (parsed.stats && typeof parsed.stats === "object") stats = parsed.stats;
+    if (parsed.prefs && typeof parsed.prefs === "object") prefs = parsed.prefs;
+
+    saveDeck(deck);
+    saveStats(stats);
+    savePrefs(prefs);
+
+    modeEl.value = prefs.mode || "symbol_to_meaning";
+    orderEl.value = prefs.order || "smart";
+    searchEl.value = prefs.search || "";
+    activeTopics = prefs.topics ?? null;
+
+    buildTopicFilters();
+    renderTotals();
+    nextCard(true);
+  } catch (e){
+    alert("Invalid JSON. " + (e && e.message ? e.message : ""));
+  }
+}
+
+// Wire UI
+revealBtn.addEventListener("click", reveal);
+nextBtn.addEventListener("click", () => nextCard(false));
+
+knewBtn.addEventListener("click", () => {
+  if (!currentCard) return;
+  bumpStat(currentCard.id, "correct");
+  nextCard(false);
+});
+
+missedBtn.addEventListener("click", () => {
+  if (!currentCard) return;
+  bumpStat(currentCard.id, "incorrect");
+  reveal();
+});
+
+resetCardBtn.addEventListener("click", () => {
+  if (!currentCard) return;
+  resetCardStats(currentCard.id);
+});
+
+resetAllBtn.addEventListener("click", () => {
+  if (!confirm("Reset ALL stats?")) return;
+  resetAllStats();
+});
+
+modeEl.addEventListener("change", () => { persistPrefs(); nextCard(false); });
+orderEl.addEventListener("change", () => { persistPrefs(); nextCard(false); });
+searchEl.addEventListener("input", () => { persistPrefs(); nextCard(true); });
+
+exportBtn.addEventListener("click", exportJSON);
+importBtn.addEventListener("click", importJSON);
+
+// Init
+saveDeck(deck);
+buildTopicFilters();
+renderTotals();
+nextCard(true);
+
+// Keyboard shortcuts: Space reveal, Enter next, 1 knew, 2 missed
+document.addEventListener("keydown", (e) => {
+  if (e.target && ["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)) return;
+  if (e.code === "Space"){ e.preventDefault(); reveal(); }
+  if (e.code === "Enter"){ e.preventDefault(); nextCard(false); }
+  if (e.key === "1"){ e.preventDefault(); knewBtn.click(); }
+  if (e.key === "2"){ e.preventDefault(); missedBtn.click(); }
+});
+</script>
+</body>
+</html>

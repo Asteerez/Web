@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tools Home</title>
+  <style>
+    :root{
+      --bg:#0b0f17;
+      --panel:#121a28;
+      --text:#e8eefc;
+      --muted:#a6b2d6;
+      --line:#22304a;
+      --focus:#35507e;
+      --good:#2f7a4e;
+      --bad:#8a3a3a;
+    }
+    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body{ margin:0; background:var(--bg); color:var(--text); }
+    .wrap{ max-width:1200px; margin:0 auto; padding:18px; display:grid; gap:14px; }
+    .panel{ background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .right{ margin-left:auto; }
+    h1{ font-size:18px; margin:0; }
+    .badge{ font-size:12px; color:var(--muted); border:1px solid var(--line); padding:4px 8px; border-radius:999px; }
+    button, select, input, textarea{
+      background:#0f1624; color:var(--text); border:1px solid var(--line);
+      border-radius:10px; padding:10px 12px; font-size:14px;
+    }
+    button{ cursor:pointer; }
+    button:hover{ border-color:var(--focus); }
+    input:focus, textarea:focus, select:focus{ outline:none; border-color:var(--focus); box-shadow:0 0 0 2px rgba(53,80,126,0.35); }
+    .ghost{ opacity:0.9; }
+    .good{ border-color:var(--good); }
+    .bad{ border-color:var(--bad); }
+    .tiny{ font-size:12px; color:var(--muted); }
+    .hr{ height:1px; background:var(--line); margin:10px 0; }
+
+    .layout{ display:grid; grid-template-columns: 1.2fr 0.8fr; gap:14px; }
+    @media (max-width: 980px){ .layout{ grid-template-columns: 1fr; } }
+
+    .grid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; }
+    @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:140px;
+    }
+    .card:hover{ border-color:var(--focus); }
+    .titleRow{ display:flex; gap:8px; align-items:center; }
+    .icon{
+      width:34px; height:34px; border-radius:12px; display:grid; place-items:center;
+      border:1px solid var(--line); background:#0f1624; font-size:16px;
+    }
+    .toolTitle{ font-weight:700; }
+    .toolDesc{ color:var(--muted); line-height:1.35; font-size:13px; }
+    .pillbar{ display:flex; gap:6px; flex-wrap:wrap; }
+    .pill{ font-size:11px; color:var(--muted); border:1px solid var(--line); padding:3px 8px; border-radius:999px; background:#0f1624; }
+    .actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; }
+    .actions button{ padding:8px 10px; font-size:13px; }
+
+    .previewBox{
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:#0f1624;
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+    }
+    .previewTop{
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      background:rgba(255,255,255,0.03);
+    }
+    .previewTop .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size:12px; color:var(--muted); }
+    iframe{ width:100%; border:0; flex:1; background:#0f1624; }
+    .empty{
+      padding:16px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    dialog{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:var(--panel);
+      color:var(--text);
+      padding:0;
+      width:min(720px, calc(100vw - 24px));
+    }
+    dialog::backdrop{ background: rgba(0,0,0,0.55); }
+    .modalHead{ padding:14px; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:center; }
+    .modalBody{ padding:14px; display:grid; gap:10px; }
+    .modalGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width: 640px){ .modalGrid{ grid-template-columns: 1fr; } }
+    label{ display:grid; gap:6px; font-size:12px; color:var(--muted); }
+    textarea{ resize:vertical; }
+    .modalFoot{ padding:14px; border-top:1px solid var(--line); display:flex; gap:10px; justify-content:flex-end; }
+    .warn{ color:var(--muted); font-size:12px; line-height:1.4; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel row">
+      <div class="row" style="gap:12px;">
+        <h1>Tools Home</h1>
+        <span class="badge" id="countBadge">0 tools</span>
+        <span class="badge" id="filterBadge">All</span>
+      </div>
+      <div class="right row">
+        <input id="search" placeholder="Search tools, tags, categories…" style="min-width:260px; flex:1;" />
+        <select id="category">
+          <option value="">All categories</option>
+        </select>
+        <select id="sort">
+          <option value="pinned">Pinned first</option>
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+          <option value="recent">Recently added</option>
+        </select>
+        <button id="addBtn" class="good">Add tool</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="row">
+          <span class="badge">Your tools</span>
+          <span class="tiny">Tip: use “Open here” to attempt an iframe preview; some sites block embedding—use “Open tab” then.</span>
+          <div class="right row">
+            <button id="exportBtn" class="ghost">Export JSON</button>
+            <button id="importBtn" class="ghost">Import JSON</button>
+            <button id="resetBtn" class="bad">Reset</button>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="grid" id="toolGrid"></div>
+
+        <div class="hr"></div>
+        <textarea id="io" rows="8" placeholder="Export appears here. Paste JSON here to import." style="width:100%;"></textarea>
+        <div class="warn">
+          Storage is local to this browser (localStorage). If you want portability, use Export/Import.
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <span class="badge">Preview panel</span>
+          <span class="tiny">For web-based tools you host yourself, “Open here” works reliably.</span>
+          <div class="right row">
+            <button id="clearPreviewBtn" class="ghost">Clear</button>
+          </div>
+        </div>
+        <div class="hr"></div>
+
+        <div class="previewBox" id="previewBox">
+          <div class="previewTop">
+            <span class="badge" id="previewName">Nothing loaded</span>
+            <span class="mono" id="previewUrl"></span>
+            <div class="right row">
+              <button id="openTabBtn" class="ghost" disabled>Open tab</button>
+            </div>
+          </div>
+          <div class="empty" id="previewEmpty">
+            Select a tool and click “Open here” to load it. If the preview stays blank, that site probably blocks embedding (common). Use “Open tab”.
+          </div>
+          <iframe id="previewFrame" title="Tool preview" style="display:none;"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <dialog id="toolModal">
+    <div class="modalHead">
+      <span class="badge" id="modalMode">Add tool</span>
+      <div class="right row">
+        <button id="closeModalBtn" class="ghost">Close</button>
+      </div>
+    </div>
+    <div class="modalBody">
+      <div class="modalGrid">
+        <label>
+          Name
+          <input id="m_name" placeholder="IB Physics Flashcards" />
+        </label>
+        <label>
+          URL (or local file URL / relative path)
+          <input id="m_url" placeholder="https://web.asteerez.xyz/physflash.html" />
+        </label>
+        <label>
+          Category
+          <input id="m_category" placeholder="Physics / Study" />
+        </label>
+        <label>
+          Icon (single character/emoji)
+          <input id="m_icon" placeholder="⚙" maxlength="2" />
+        </label>
+      </div>
+      <label>
+        Description
+        <textarea id="m_desc" rows="3" placeholder="What the tool does, quick usage notes."></textarea>
+      </label>
+      <label>
+        Tags (comma-separated)
+        <input id="m_tags" placeholder="flashcards, ib, physics, year 1" />
+      </label>
+      <div class="row">
+        <label class="row" style="gap:8px; color:var(--muted); font-size:12px;">
+          <input type="checkbox" id="m_pinned" />
+          Pinned (show first)
+        </label>
+      </div>
+      <div class="warn">
+        If you are hosting tools as local HTML files, you can set the URL to a relative path like <span style="font-family:ui-monospace;">./ib_physics_y1_flashcards.html</span>.
+      </div>
+    </div>
+    <div class="modalFoot">
+      <button id="deleteBtn" class="bad" style="display:none;">Delete</button>
+      <button id="saveBtn" class="good">Save</button>
+    </div>
+  </dialog>
+
+<script>
+  // ========= Storage =========
+  const LS_TOOLS = "tools_home_v1";
+  const LS_PREFS = "tools_home_prefs_v1";
+
+  // Seed tools (edit these defaults if you want)
+  const SEED = [
+    {
+      id: crypto.randomUUID(),
+      name: "IB Physics Year 1 Flashcards",
+      url: "./ib_physics_y1_flashcards.html",
+      category: "Physics / Study",
+      icon: "📚",
+      desc: "Variable flashcard simulator (IB DP Year 1 deck).",
+      tags: ["flashcards","ib","physics","year 1"],
+      pinned: true,
+      createdAt: Date.now()
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Blank Tool Slot",
+      url: "https://example.com",
+      category: "Utilities",
+      icon: "⚙",
+      desc: "Replace with your next web-based tool.",
+      tags: ["template"],
+      pinned: false,
+      createdAt: Date.now() - 1000
+    }
+  ];
+
+  function loadTools(){
+    const raw = localStorage.getItem(LS_TOOLS);
+    if(!raw){
+      localStorage.setItem(LS_TOOLS, JSON.stringify(SEED));
+      return structuredClone(SEED);
+    }
+    try{
+      const parsed = JSON.parse(raw);
+      if(!Array.isArray(parsed)) throw new Error("not array");
+      return parsed;
+    }catch{
+      localStorage.setItem(LS_TOOLS, JSON.stringify(SEED));
+      return structuredClone(SEED);
+    }
+  }
+  function saveTools(tools){ localStorage.setItem(LS_TOOLS, JSON.stringify(tools)); }
+
+  function loadPrefs(){
+    const raw = localStorage.getItem(LS_PREFS);
+    if(!raw) return { search:"", category:"", sort:"pinned" };
+    try{ return JSON.parse(raw) || { search:"", category:"", sort:"pinned" }; }
+    catch{ return { search:"", category:"", sort:"pinned" }; }
+  }
+  function savePrefs(p){ localStorage.setItem(LS_PREFS, JSON.stringify(p)); }
+
+  let tools = loadTools();
+  let prefs = loadPrefs();
+
+  // ========= UI Refs =========
+  const toolGrid = document.getElementById("toolGrid");
+  const searchEl = document.getElementById("search");
+  const categoryEl = document.getElementById("category");
+  const sortEl = document.getElementById("sort");
+  const countBadge = document.getElementById("countBadge");
+  const filterBadge = document.getElementById("filterBadge");
+
+  const ioEl = document.getElementById("io");
+  const exportBtn = document.getElementById("exportBtn");
+  const importBtn = document.getElementById("importBtn");
+  const resetBtn = document.getElementById("resetBtn");
+
+  const previewName = document.getElementById("previewName");
+  const previewUrl = document.getElementById("previewUrl");
+  const previewFrame = document.getElementById("previewFrame");
+  const previewEmpty = document.getElementById("previewEmpty");
+  const clearPreviewBtn = document.getElementById("clearPreviewBtn");
+  const openTabBtn = document.getElementById("openTabBtn");
+
+  // Modal
+  const modal = document.getElementById("toolModal");
+  const modalMode = document.getElementById("modalMode");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const addBtn = document.getElementById("addBtn");
+  const saveBtn = document.getElementById("saveBtn");
+  const deleteBtn = document.getElementById("deleteBtn");
+
+  const m_name = document.getElementById("m_name");
+  const m_url = document.getElementById("m_url");
+  const m_category = document.getElementById("m_category");
+  const m_icon = document.getElementById("m_icon");
+  const m_desc = document.getElementById("m_desc");
+  const m_tags = document.getElementById("m_tags");
+  const m_pinned = document.getElementById("m_pinned");
+
+  let editingId = null;
+  let currentPreviewTool = null;
+
+  // ========= Helpers =========
+  function uniq(arr){ return Array.from(new Set(arr)); }
+  function norm(s){ return (s || "").toString().trim(); }
+  function parseTags(s){
+    return uniq(norm(s).split(",").map(x => x.trim()).filter(Boolean));
+  }
+
+  function categories(){
+    return uniq(tools.map(t => norm(t.category)).filter(Boolean)).sort((a,b)=>a.localeCompare(b));
+  }
+
+  function applyPrefsToUI(){
+    searchEl.value = prefs.search || "";
+    categoryEl.value = prefs.category || "";
+    sortEl.value = prefs.sort || "pinned";
+  }
+
+  function updateCategoryDropdown(){
+    const cats = categories();
+    const current = categoryEl.value;
+    categoryEl.innerHTML = `<option value="">All categories</option>` + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+    // restore if still exists
+    categoryEl.value = cats.includes(current) ? current : (prefs.category || "");
+  }
+
+  function escapeHtml(s){
+    return (s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function filteredTools(){
+    const q = norm(searchEl.value).toLowerCase();
+    const cat = norm(categoryEl.value);
+    return tools.filter(t => {
+      if(cat && norm(t.category) !== cat) return false;
+      if(!q) return true;
+      const hay = [
+        t.name, t.url, t.category, t.desc, ...(t.tags||[])
+      ].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+  }
+
+  function sortTools(list){
+    const mode = sortEl.value;
+    const copy = [...list];
+
+    if(mode === "recent"){
+      copy.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+      return copy;
+    }
+    if(mode === "az"){
+      copy.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+      return copy;
+    }
+    if(mode === "za"){
+      copy.sort((a,b) => (b.name||"").localeCompare(a.name||""));
+      return copy;
+    }
+
+    // pinned first (default)
+    copy.sort((a,b) => {
+      const ap = !!a.pinned, bp = !!b.pinned;
+      if(ap !== bp) return bp - ap;
+      return (a.name||"").localeCompare(b.name||"");
+    });
+    return copy;
+  }
+
+  function render(){
+    updateCategoryDropdown();
+
+    const list = sortTools(filteredTools());
+    countBadge.textContent = `${list.length} tool${list.length===1?"":"s"}`;
+    const cat = norm(categoryEl.value);
+    filterBadge.textContent = cat ? cat : "All";
+
+    toolGrid.innerHTML = "";
+    for(const t of list){
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const tags = (t.tags||[]).slice(0,6);
+      const pinnedPill = t.pinned ? `<span class="pill">Pinned</span>` : "";
+
+      card.innerHTML = `
+        <div class="titleRow">
+          <div class="icon">${escapeHtml(t.icon || "🔗")}</div>
+          <div style="min-width:0;">
+            <div class="toolTitle">${escapeHtml(t.name || "Untitled")}</div>
+            <div class="tiny">${escapeHtml(t.category || "Uncategorized")}</div>
+          </div>
+        </div>
+        <div class="toolDesc">${escapeHtml(t.desc || "")}</div>
+        <div class="pillbar">
+          ${pinnedPill}
+          ${tags.map(x => `<span class="pill">${escapeHtml(x)}</span>`).join("")}
+        </div>
+        <div class="actions">
+          <button data-act="openHere" data-id="${t.id}" class="good">Open here</button>
+          <button data-act="openTab" data-id="${t.id}" class="ghost">Open tab</button>
+          <button data-act="pin" data-id="${t.id}" class="ghost">${t.pinned ? "Unpin" : "Pin"}</button>
+          <button data-act="edit" data-id="${t.id}" class="ghost">Edit</button>
+        </div>
+      `;
+      toolGrid.appendChild(card);
+    }
+  }
+
+  function persistPrefs(){
+    prefs.search = searchEl.value;
+    prefs.category = categoryEl.value;
+    prefs.sort = sortEl.value;
+    savePrefs(prefs);
+  }
+
+  // ========= Preview =========
+  function setPreview(tool){
+    currentPreviewTool = tool;
+    previewName.textContent = tool ? tool.name : "Nothing loaded";
+    previewUrl.textContent = tool ? tool.url : "";
+    openTabBtn.disabled = !tool;
+
+    if(!tool){
+      previewFrame.style.display = "none";
+      previewEmpty.style.display = "block";
+      previewFrame.src = "about:blank";
+      return;
+    }
+
+    // Attempt iframe load (may be blocked by X-Frame-Options / CSP)
+    previewEmpty.style.display = "none";
+    previewFrame.style.display = "block";
+    previewFrame.src = tool.url;
+  }
+
+  // ========= Modal =========
+  function openAdd(){
+    editingId = null;
+    modalMode.textContent = "Add tool";
+    deleteBtn.style.display = "none";
+    m_name.value = "";
+    m_url.value = "";
+    m_category.value = "";
+    m_icon.value = "🔗";
+    m_desc.value = "";
+    m_tags.value = "";
+    m_pinned.checked = false;
+    modal.showModal();
+  }
+
+  function openEdit(id){
+    const t = tools.find(x => x.id === id);
+    if(!t) return;
+    editingId = id;
+    modalMode.textContent = "Edit tool";
+    deleteBtn.style.display = "inline-block";
+    m_name.value = t.name || "";
+    m_url.value = t.url || "";
+    m_category.value = t.category || "";
+    m_icon.value = t.icon || "🔗";
+    m_desc.value = t.desc || "";
+    m_tags.value = (t.tags || []).join(", ");
+    m_pinned.checked = !!t.pinned;
+    modal.showModal();
+  }
+
+  function saveFromModal(){
+    const name = norm(m_name.value);
+    const url = norm(m_url.value);
+    if(!name) return alert("Name is required.");
+    if(!url) return alert("URL is required.");
+
+    const obj = {
+      id: editingId || crypto.randomUUID(),
+      name,
+      url,
+      category: norm(m_category.value) || "Uncategorized",
+      icon: norm(m_icon.value) || "🔗",
+      desc: norm(m_desc.value),
+      tags: parseTags(m_tags.value),
+      pinned: !!m_pinned.checked,
+      createdAt: editingId ? (tools.find(x=>x.id===editingId)?.createdAt || Date.now()) : Date.now()
+    };
+
+    if(editingId){
+      tools = tools.map(t => t.id === editingId ? obj : t);
+    }else{
+      tools = [obj, ...tools];
+    }
+    saveTools(tools);
+    persistPrefs();
+    modal.close();
+    render();
+  }
+
+  function deleteFromModal(){
+    if(!editingId) return;
+    const t = tools.find(x => x.id === editingId);
+    if(!t) return;
+    if(!confirm(`Delete "${t.name}"?`)) return;
+
+    tools = tools.filter(x => x.id !== editingId);
+    saveTools(tools);
+
+    if(currentPreviewTool && currentPreviewTool.id === editingId){
+      setPreview(null);
+    }
+
+    modal.close();
+    render();
+  }
+
+  // ========= Import / Export =========
+  function exportJSON(){
+    const payload = { tools, prefs };
+    ioEl.value = JSON.stringify(payload, null, 2);
+  }
+
+  function importJSON(){
+    const raw = norm(ioEl.value);
+    if(!raw) return alert("Paste JSON first.");
+    try{
+      const parsed = JSON.parse(raw);
+      if(parsed.tools && Array.isArray(parsed.tools)){
+        tools = parsed.tools;
+        saveTools(tools);
+      }
+      if(parsed.prefs && typeof parsed.prefs === "object"){
+        prefs = parsed.prefs;
+        savePrefs(prefs);
+      }
+      applyPrefsToUI();
+      render();
+    }catch(e){
+      alert("Invalid JSON: " + (e?.message || "unknown error"));
+    }
+  }
+
+  function resetAll(){
+    if(!confirm("Reset tools + preferences back to defaults?")) return;
+    tools = structuredClone(SEED);
+    prefs = { search:"", category:"", sort:"pinned" };
+    saveTools(tools);
+    savePrefs(prefs);
+    ioEl.value = "";
+    setPreview(null);
+    applyPrefsToUI();
+    render();
+  }
+
+  // ========= Events =========
+  addBtn.addEventListener("click", openAdd);
+  closeModalBtn.addEventListener("click", () => modal.close());
+  saveBtn.addEventListener("click", saveFromModal);
+  deleteBtn.addEventListener("click", deleteFromModal);
+
+  exportBtn.addEventListener("click", exportJSON);
+  importBtn.addEventListener("click", importJSON);
+  resetBtn.addEventListener("click", resetAll);
+
+  clearPreviewBtn.addEventListener("click", () => setPreview(null));
+  openTabBtn.addEventListener("click", () => {
+    if(!currentPreviewTool) return;
+    window.open(currentPreviewTool.url, "_blank", "noopener,noreferrer");
+  });
+
+  searchEl.addEventListener("input", () => { persistPrefs(); render(); });
+  categoryEl.addEventListener("change", () => { persistPrefs(); render(); });
+  sortEl.addEventListener("change", () => { persistPrefs(); render(); });
+
+  toolGrid.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+    const act = btn.getAttribute("data-act");
+    const id = btn.getAttribute("data-id");
+    const t = tools.find(x => x.id === id);
+    if(!t) return;
+
+    if(act === "openHere"){
+      setPreview(t);
+      return;
+    }
+    if(act === "openTab"){
+      window.open(t.url, "_blank", "noopener,noreferrer");
+      return;
+    }
+    if(act === "edit"){
+      openEdit(id);
+      return;
+    }
+    if(act === "pin"){
+      tools = tools.map(x => x.id === id ? { ...x, pinned: !x.pinned } : x);
+      saveTools(tools);
+      render();
+      return;
+    }
+  });
+
+  // If iframe fails to display due to embed blocks, keep guidance visible
+  previewFrame.addEventListener("load", () => {
+    // Some blocked iframes may still "load" into an error page; we can’t reliably detect.
+    // The “Open tab” button remains available.
+  });
+
+  // ========= Init =========
+  applyPrefsToUI();
+  render();
+  setPreview(null);
+</script>
+</body>
+</html>
