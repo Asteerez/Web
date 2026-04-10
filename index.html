@@ -46,6 +46,18 @@
     .socials{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
     .socials a{display:block;background:var(--surface);padding:12px;border-radius:12px;border:1px solid rgba(255,46,166,.18)}
     footer{margin:36px 0 0;padding:18px 0;color:#cfcfe4;border-top:1px solid rgba(255,46,166,.2);text-align:center}
+
+    .portfolio-grid{display:grid;gap:12px}
+    .music-panel{display:grid;gap:12px;background:var(--surface);padding:16px;border-radius:12px;border:1px solid rgba(255,46,166,.18)}
+    .music-panel__head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .music-panel__eyebrow{margin:0;color:#ffd6f4;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+    .music-panel__sub{margin:4px 0 0;color:var(--muted)}
+    .track-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .track-card{background:rgba(255,46,166,.08);border:1px solid rgba(255,46,166,.18);border-radius:12px;padding:14px;display:grid;gap:10px}
+    .track-card h4{margin:0;font-size:16px}
+    .track-card p{margin:0;color:var(--muted);font-size:14px}
+    .track-tag{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;background:rgba(255,46,166,.15);border:1px solid rgba(255,46,166,.24);color:#ffd6f4;font-size:12px}
+    .track-card audio{width:100%}
   </style>
 </head>
 <body>
@@ -79,11 +91,53 @@
 
         <div class="card">
           <h2 class="section-title">🎨 Portfolio</h2>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-            <a class="socials__item" href="#" style="display:block;background:var(--surface);padding:16px;border-radius:12px;border:1px solid rgba(255,46,166,.18)">
-              <h3 style="margin:0 0 6px">🎵 Music</h3>
-              <p style="margin:0;color:var(--muted)">In progress</p>
-            </a>
+          <div class="portfolio-grid">
+            <section class="music-panel" aria-label="Music portfolio">
+              <div class="music-panel__head">
+                <div>
+                  <p class="music-panel__eyebrow">Featured Tracks</p>
+                  <h3 style="margin:0 0 6px">🎵 Music</h3>
+                  <p class="music-panel__sub">Three released tracks, embedded directly into the portfolio.</p>
+                </div>
+                <span class="track-tag">Now Listening</span>
+              </div>
+
+              <div class="track-list">
+                <article class="track-card">
+                  <div>
+                    <h4>Quotaquantize</h4>
+                    <p>Original track</p>
+                  </div>
+                  <audio controls preload="none">
+                    <source src="Quotaquantize.wav" type="audio/wav" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </article>
+
+                <article class="track-card">
+                  <div>
+                    <h4>Winter's End</h4>
+                    <p>Original track</p>
+                  </div>
+                  <audio controls preload="none">
+                    <source src="Winters End.wav" type="audio/wav" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </article>
+
+                <article class="track-card">
+                  <div>
+                    <h4>Assembly</h4>
+                    <p>Original track</p>
+                  </div>
+                  <audio controls preload="none">
+                    <source src="assembly.wav" type="audio/wav" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </article>
+              </div>
+            </section>
+
             <a class="socials__item" href="#" style="display:block;background:var(--surface);padding:16px;border-radius:12px;border:1px solid rgba(255,46,166,.18)">
               <h3 style="margin:0 0 6px">🎨 Art</h3>
               <p style="margin:0;color:var(--muted)">In progress</p>
