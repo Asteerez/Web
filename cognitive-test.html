@@ -81,11 +81,11 @@
   </main>
 <script>
 let users = [];
-fetch('/api/users').then(r=>r.json()).then(data=>{
+fetch('assets/cognitive-users.json').then(r=>r.json()).then(data=>{
   users = data.users || [];
   document.getElementById('userList').innerHTML = users.map(([u,p])=>`<p><code>${u}</code> / <code>${p}</code></p>`).join('');
 }).catch(()=>{
-  document.getElementById('userList').innerHTML = '<p>Unable to load users. Ensure server.js is running.</p>';
+  document.getElementById('userList').innerHTML = '<p>Unable to load users config. Run `node server.js build-pages`.</p>';
 });
 
 const questionBank = [
@@ -144,42 +144,39 @@ async function finishTest(){
   resultSummary.innerHTML = `<span class="ok">Completed.</span> ${currentUser} scored <strong>${score}</strong> out of <strong>${max}</strong> points.`;
   scoreBreakdown.innerHTML = [1,2,3].map(d=>`<p>Difficulty ${d} (+${d}): ${byDiff[d].correct}/${byDiff[d].total} correct, ${byDiff[d].pts} points.</p>`).join('');
   try {
-    const res = await fetch('/api/submit-result', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        username: currentUser,
-        score,
-        maxScore: max,
-        byDiff,
-        startedAt,
-        finishedAt: new Date().toISOString(),
-        answers
-      })
-    });
-    const data = await res.json();
-    if (!data.ok) scoreBreakdown.innerHTML += '<p class="warn">Result save failed.</p>';
-    else scoreBreakdown.innerHTML += '<p class="ok">Result saved to repository file.</p>';
+    const record = {
+      username: currentUser,
+      score,
+      maxScore: max,
+      byDiff,
+      startedAt,
+      finishedAt: new Date().toISOString(),
+      answers
+    };
+    const key = 'cognitive_test_results';
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    existing.push(record);
+    localStorage.setItem(key, JSON.stringify(existing));
+
+    const blob = new Blob([JSON.stringify(existing, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    scoreBreakdown.innerHTML += `<p class="ok">Result saved in browser storage.</p>
+      <p><a href="${url}" download="test-results.json">Download updated test-results.json</a> for commit to this repository.</p>`;
   } catch (e){
-    scoreBreakdown.innerHTML += '<p class="warn">Result could not be saved (server unavailable).</p>';
+    scoreBreakdown.innerHTML += '<p class="warn">Result save failed in this browser.</p>';
   }
 }
 
 loginBtn.addEventListener('click', async ()=>{
   const u = username.value.trim(); const p = password.value;
   loginMsg.textContent = '';
-  try {
-    const res = await fetch('/api/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
-    const data = await res.json();
-    if(data.ok){
-      currentUser=u; activeUser.textContent=u; loginCard.classList.add('hidden'); testCard.classList.remove('hidden');
-      startedAt = new Date().toISOString();
-      interval=setInterval(tick,1000); renderQ();
-    } else {
-      loginMsg.textContent = 'Invalid username or password.';
-    }
-  } catch (e){
-    loginMsg.textContent = 'Login API unavailable. Start server.js first.';
+  const map = Object.fromEntries(users);
+  if(map[u] && map[u] === p){
+    currentUser=u; activeUser.textContent=u; loginCard.classList.add('hidden'); testCard.classList.remove('hidden');
+    startedAt = new Date().toISOString();
+    interval=setInterval(tick,1000); renderQ();
+  } else {
+    loginMsg.textContent = 'Invalid username or password.';
   }
 });
 nextBtn.addEventListener('click',next);
