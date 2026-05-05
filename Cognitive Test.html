@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cognitive Performance Test</title>
+  <style>
+    :root{--bg:#0b0c10;--surface:#131722;--ink:#f2f4ff;--muted:#a7aec6;--accent:#7c5cff;--good:#3ac779;--warn:#ffca3a}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0b0c10,#0e1220);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+    .wrap{max-width:920px;margin:0 auto;padding:28px}
+    .card{background:rgba(19,23,34,.9);border:1px solid rgba(124,92,255,.28);border-radius:16px;padding:20px;margin-bottom:16px}
+    h1,h2,h3{margin:.2em 0}
+    p{color:var(--muted)}
+    label{display:block;margin:10px 0 4px}
+    input,button,select{font:inherit;border-radius:10px;border:1px solid #2a2f44;background:#0b1020;color:#fff;padding:10px 12px}
+    button{cursor:pointer;background:linear-gradient(90deg,var(--accent),#ad7eff);border:0;font-weight:700}
+    button.secondary{background:#1a2033;border:1px solid #303a5f}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .hidden{display:none}
+    .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .stat{background:#0e1426;border:1px solid #2c3558;border-radius:12px;padding:10px}
+    .question{font-size:1.2rem;margin:12px 0}
+    .answers{display:grid;gap:8px}
+    .ok{color:var(--good)}.warn{color:var(--warn)}
+    code{background:#0f1528;padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>5-Minute Cognitive Performance Test</h1>
+    <p>Login is required. Test categories: Memory, Attention, and Logic. Each question has a difficulty (1/2/3 points).</p>
+
+    <section class="card" id="loginCard">
+      <h2>Login</h2>
+      <p>Use one of the provisioned usernames below with its assigned random password.</p>
+      <div class="row">
+        <div style="flex:1;min-width:220px">
+          <label for="username">Username</label>
+          <input id="username" autocomplete="username" />
+        </div>
+        <div style="flex:1;min-width:220px">
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="current-password" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="loginBtn">Sign in</button>
+        <span id="loginMsg" class="warn"></span>
+      </div>
+      <details style="margin-top:12px">
+        <summary>Provisioned users (20 total)</summary>
+        <div id="userList"></div>
+      </details>
+    </section>
+
+    <section class="card hidden" id="testCard">
+      <div class="row" style="justify-content:space-between">
+        <h2 style="margin:0">Active Test</h2>
+        <button class="secondary" id="submitNow">Submit Early</button>
+      </div>
+      <div class="meta">
+        <div class="stat"><strong>User:</strong> <span id="activeUser"></span></div>
+        <div class="stat"><strong>Time left:</strong> <span id="timer">05:00</span></div>
+        <div class="stat"><strong>Question:</strong> <span id="qIdx">1</span>/<span id="qTotal">18</span></div>
+        <div class="stat"><strong>Current value:</strong> <span id="qWeight">+1</span></div>
+      </div>
+      <p><strong>Category:</strong> <span id="qCat"></span> | <strong>Difficulty:</strong> <span id="qDiff"></span></p>
+      <div class="question" id="questionText"></div>
+      <div class="answers" id="answerWrap"></div>
+      <div class="row" style="margin-top:14px">
+        <button id="nextBtn" class="secondary">Next</button>
+      </div>
+    </section>
+
+    <section class="card hidden" id="resultCard">
+      <h2>Results</h2>
+      <p id="resultSummary"></p>
+      <div id="scoreBreakdown"></div>
+    </section>
+  </main>
+<script>
+let users = [];
+fetch('/api/users').then(r=>r.json()).then(data=>{
+  users = data.users || [];
+  document.getElementById('userList').innerHTML = users.map(([u,p])=>`<p><code>${u}</code> / <code>${p}</code></p>`).join('');
+}).catch(()=>{
+  document.getElementById('userList').innerHTML = '<p>Unable to load users. Ensure server.js is running.</p>';
+});
+
+const questionBank = [
+  {cat:'Memory',diff:1,q:'Study for 4 seconds: 4, 9, 2, 7. Which number was second?',choices:['4','9','2','7'],a:1},
+  {cat:'Memory',diff:2,q:'Remember this order: lamp, cloud, river, stone. Which item came immediately before "stone"?',choices:['lamp','cloud','river','none'],a:2},
+  {cat:'Memory',diff:3,q:'You see: K3M8P1. What is the sum of the digits in odd positions (1st, 3rd, 5th)?',choices:['4','9','12','14'],a:0},
+
+  {cat:'Attention',diff:1,q:'Which string is exactly identical to "ABaB12x"?',choices:['ABaB12x','ABAB12x','ABaB21x','ABaBl2x'],a:0},
+  {cat:'Attention',diff:2,q:'How many consonants are in "neuroscience"?',choices:['4','5','6','7'],a:2},
+  {cat:'Attention',diff:3,q:'Find the only pair with the same relationship as "painter : brush".',choices:['chef : recipe','pilot : runway','sculptor : chisel','author : library'],a:2},
+
+  {cat:'Logic',diff:1,q:'If all Tarns are Fex and some Fex are Lops, which statement must be true?',choices:['Some Tarns are Lops','All Tarns are Fex','No Lops are Tarns','All Fex are Tarns'],a:1},
+  {cat:'Logic',diff:2,q:'Next number in pattern: 2, 6, 12, 20, 30, ?',choices:['36','40','42','44'],a:2},
+  {cat:'Logic',diff:3,q:'A clock shows 3:15. What is the smaller angle between the hands?',choices:['0°','7.5°','15°','22.5°'],a:1},
+
+  {cat:'Memory',diff:1,q:'Recall this triplet: fox - 18 - blue. Which element was in the middle?',choices:['fox','18','blue','none'],a:1},
+  {cat:'Memory',diff:2,q:'If sequence is Q, T, W, Z, what comes next by +3 letter jumps?',choices:['B','C','D','E'],a:2},
+  {cat:'Memory',diff:3,q:'Memorize "R4D9K2". Which character is 5th?',choices:['9','K','2','D'],a:1},
+
+  {cat:'Attention',diff:1,q:'Count only the letter "e" in: "reference sentence".',choices:['4','5','6','7'],a:2},
+  {cat:'Attention',diff:2,q:'Which option has words in strict alphabetical order?',choices:['angle, ankle, ant','brisk, bridge, brim','cable, cactus, cadet','drape, draft, dragon'],a:0},
+  {cat:'Attention',diff:3,q:'Which one is NOT an anagram of "listen"?',choices:['silent','enlist','tinsel','inletsx'],a:3},
+
+  {cat:'Logic',diff:1,q:'If x + 3 = 11, what is x?',choices:['6','7','8','9'],a:2},
+  {cat:'Logic',diff:2,q:'If A>B, B>C, and C>D, which is true?',choices:['D>A','A>D','B<D','C>A'],a:1},
+  {cat:'Logic',diff:3,q:'A bag has 3 red, 2 blue, 1 green marbles. Minimum draws without replacement to guarantee two of same color?',choices:['2','3','4','5'],a:2}
+];
+let currentUser = null, idx = 0, selected = null, score = 0, answers = [], interval = null, startedAt = null;
+const testLengthSec = 5 * 60; let timeLeft = testLengthSec;
+const byDiff = {1:{correct:0,total:0,pts:0},2:{correct:0,total:0,pts:0},3:{correct:0,total:0,pts:0}};
+
+function renderQ(){
+  const item = questionBank[idx]; if(!item) return finishTest();
+  selected = null;
+  qIdx.textContent = idx+1; qTotal.textContent = questionBank.length;
+  qWeight.textContent = `+${item.diff}`; qCat.textContent = item.cat; qDiff.textContent = item.diff;
+  questionText.textContent = item.q;
+  answerWrap.innerHTML = item.choices.map((c,i)=>`<label><input type="radio" name="ans" value="${i}"> ${c}</label>`).join('');
+  answerWrap.querySelectorAll('input').forEach(el=>el.addEventListener('change',e=>selected=Number(e.target.value)));
+}
+function tick(){
+  timeLeft--; const m=String(Math.floor(timeLeft/60)).padStart(2,'0');const s=String(timeLeft%60).padStart(2,'0');
+  timer.textContent = `${m}:${s}`; if(timeLeft<=0) finishTest();
+}
+function next(){
+  if(selected===null){alert('Please choose an answer before continuing.');return;}
+  const item = questionBank[idx];
+  const correct = selected===item.a;
+  byDiff[item.diff].total++; if(correct){ score += item.diff; byDiff[item.diff].correct++; byDiff[item.diff].pts += item.diff; }
+  answers.push({idx,correct,diff:item.diff,cat:item.cat}); idx++; renderQ();
+}
+async function finishTest(){
+  clearInterval(interval);
+  testCard.classList.add('hidden'); resultCard.classList.remove('hidden');
+  const max = questionBank.reduce((a,q)=>a+q.diff,0);
+  resultSummary.innerHTML = `<span class="ok">Completed.</span> ${currentUser} scored <strong>${score}</strong> out of <strong>${max}</strong> points.`;
+  scoreBreakdown.innerHTML = [1,2,3].map(d=>`<p>Difficulty ${d} (+${d}): ${byDiff[d].correct}/${byDiff[d].total} correct, ${byDiff[d].pts} points.</p>`).join('');
+  try {
+    const res = await fetch('/api/submit-result', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        username: currentUser,
+        score,
+        maxScore: max,
+        byDiff,
+        startedAt,
+        finishedAt: new Date().toISOString(),
+        answers
+      })
+    });
+    const data = await res.json();
+    if (!data.ok) scoreBreakdown.innerHTML += '<p class="warn">Result save failed.</p>';
+    else scoreBreakdown.innerHTML += '<p class="ok">Result saved to repository file.</p>';
+  } catch (e){
+    scoreBreakdown.innerHTML += '<p class="warn">Result could not be saved (server unavailable).</p>';
+  }
+}
+
+loginBtn.addEventListener('click', async ()=>{
+  const u = username.value.trim(); const p = password.value;
+  loginMsg.textContent = '';
+  try {
+    const res = await fetch('/api/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const data = await res.json();
+    if(data.ok){
+      currentUser=u; activeUser.textContent=u; loginCard.classList.add('hidden'); testCard.classList.remove('hidden');
+      startedAt = new Date().toISOString();
+      interval=setInterval(tick,1000); renderQ();
+    } else {
+      loginMsg.textContent = 'Invalid username or password.';
+    }
+  } catch (e){
+    loginMsg.textContent = 'Login API unavailable. Start server.js first.';
+  }
+});
+nextBtn.addEventListener('click',next);
+submitNow.addEventListener('click',finishTest);
+</script>
+</body>
+</html>
